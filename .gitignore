@@ -2,3 +2,5 @@
 BackEnd/node_modules/
 
 BackEnd/package-lock.json
+
+BackEnd/deploy/

@@ -1,0 +1,1 @@
+export const testing2 = 'Tiến Thành';
