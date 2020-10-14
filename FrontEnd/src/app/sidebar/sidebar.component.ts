@@ -11,15 +11,17 @@ export interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
     { path: '/home',     title: 'home',         icon: 'nc-app',       class: '' },
     { path: '/web-setting',     title: 'setting',         icon: 'nc-settings',       class: '' },
-    { path: '/icons',         title: 'Icons',             icon: 'nc-diamond',    class: '' },
-    { path: '/maps',          title: 'Maps',              icon: 'nc-pin-3',      class: '' },
+    { path: '/web-settingg',     title: 'Article',         icon: 'nc-paper',       class: '' },
+    { path: '/icons',         title: 'Gender',             icon: 'nc-align-left-2',    class: '' },
+    { path: '/maps',          title: 'Country',              icon: 'nc-globe',      class: '' },
     { path: '/notifications', title: 'Notifications',     icon: 'nc-bell-55',    class: '' },
-    { path: '/user',          title: 'User Profile',      icon: 'nc-single-02',  class: '' },
-    { path: '/table',         title: 'Table List',        icon: 'nc-tile-56',    class: '' },
-    { path: '/typography',    title: 'Typography',        icon: 'nc-caps-small', class: '' },
-    { path: '/upgrade',       title: 'Upgrade to PRO',    icon: 'nc-spaceship',  class: 'active-pro' },
+    { path: '/user',          title: 'User Manager',      icon: 'nc-single-02',  class: '' },
+    { path: '/user',          title: 'Report',      icon: 'nc-support-17',  class: '' },
+    { path: '/table',         title: 'Category',        icon: 'nc-tile-56',    class: '' },
+    { path: '/typography',    title: 'Tag',        icon: 'nc-book-bookmark', class: '' },
+    
 ];
-
+//{ path: '/upgrade',       title: 'Upgrade to PRO',    icon: 'nc-spaceship',  class: 'active-pro' },
 @Component({
     moduleId: module.id,
     selector: 'sidebar-cmp',

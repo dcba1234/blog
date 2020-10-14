@@ -33,7 +33,7 @@ export class WebPageComponent implements OnInit {
   modalRef: BsModalRef;
   confirmRef: BsModalRef;
   currentId;
-  cols = ['Id', 'Title', 'Url', ''];
+  cols = ['Id', 'Title', 'Url', 'Create', ''];
   form: FormGroup;
   constructor(
     private svc: BaseService,
