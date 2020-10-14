@@ -1,0 +1,69 @@
+<div class="setting-container">
+  <div class="row ">
+    <!-- <div class="input-group no-border col-3">
+      <input type="text" value="" class="form-control" placeholder="Search...">
+      <div class="input-group-append">
+        <div class="input-group-text">
+          <i class="nc-icon nc-zoom-split"></i>
+        </div>
+      </div>
+    </div> -->
+    <div class="col-3">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text pr-2" id="inputGroupPrepend2"><i class="fa fa-search" aria-hidden="true"></i></span>
+        </div>
+        <input type="text" class="form-control" id="validationDefaultUsername" placeholder="Enter key word . . ." aria-describedby="inputGroupPrepend2" required>
+      </div>
+    </div>
+    <div class="col-2 no-border">
+      <div class="input-group">
+        <button type="button" class="btn btn-info" (click)="openModal(template)"><i class="fa fa-plus" aria-hidden="true" ></i> Add project</button>
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div *ngFor="let item of this.dataSource.rows" class="col-4">
+      <card heightFixed="240px" class="card-height-fixed">
+        <div class="d-flex align-items-center">
+          <h3>{{item.title}}</h3>
+          <i class="fa fa-trash ml-auto cursor-poiter" aria-hidden="true"></i>
+        </div>
+        <hr>
+        <p class="max-line-2" [title]="item.note">{{item.note}}</p>
+        <button (click)="goTo(item)" type="button" style="width: 100px;" class="btn btn-info mb-2">Start  </button>
+        <a href="{{item.url}}" target="_blank">{{item.url}}</a>
+      </card>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Create New Project</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Title</label>
+        <input required type="text" class="form-control" formControlName="title" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Note</label>
+        <textarea class="form-control" formControlName="note" id="exampleInputPassword1" placeholder=""></textarea>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Title</label>
+        <input type="text" class="form-control" formControlName="url" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+      </div>
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-secondary mr-2">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
