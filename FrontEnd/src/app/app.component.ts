@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-root',
@@ -6,4 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {}
+export class AppComponent {
+  loader = this.loadingBar.useRef();
+  constructor(private loadingBar: LoadingBarService) {
+    // this.loader.start()
+  }
+}

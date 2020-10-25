@@ -1,15 +1,69 @@
+import { post } from './controllers/postController';
+import { reason } from './controllers/reasonRPController';
+import { tag } from './controllers/TagController';
+import { category } from './controllers/CategoryController';
 import { routeCon } from "./controllers/routeController";
 import { settingWeb } from "./controllers/settingwebController";
 import { settingPage } from "./controllers/settingwebPageController";
+import { country } from './controllers/CountryController';
+import { gender } from './controllers/GenderController';
+import { interaction } from './controllers/interactionController';
 
 const express = require("express");
 const router = express.Router();
 export const initAPIs = (app) => {
   router.get("/setting-web", settingWeb.getAll())
+  router.post("/setting-web", settingWeb.save())
   router.get("/setting-web/list", settingWeb.getPage())
   router.get("/setting-web/:id", settingPage.getPage())
   router.post("/setting-web/save", settingPage.save())
   router.delete("/setting-web/delete/:id", settingPage.delete())
+  router.get("/setting-page/:id", settingPage.getById())
+  router.post("/data", settingPage.getDataByUrl())
+  router.get("/category/all", category.getAll())
+  router.get("/category", category.getPage())
+  router.post("/category/save", category.save())
+  router.delete("/category/deactive/:id", category.deactive())
+  router.delete("/category/active/:id", category.active())
 
+
+
+
+
+  router.get("/tag", tag.getAll())
+  //router.post("/category", category.getAll())
+
+
+  router.get("/country/all", country.getAll())
+  router.get("/country", country.getPage())
+  router.post("/country/save", country.save())
+  router.delete("/country/deactive/:id", country.deactive())
+  router.delete("/country/active/:id", country.active())
+
+
+
+
+
+
+
+  router.get("/gender/all", gender.getAll())
+  router.get("/gender", gender.getPage())
+  router.post("/gender/save", gender.save())
+  router.delete("/gender/deactive/:id", gender.deactive())
+  router.delete("/gender/active/:id", gender.active())
+
+
+
+  router.get("/reason/all", reason.getAll())
+  router.get("/reason", reason.getPage())
+
+
+  router.get("/post", post.getPage())
+  router.post("/post", post.save())
+  router.delete("/post/deactive/:id", post.deactive())
+  router.delete("/post/active/:id", post.active())
+
+
+  router.get("/report", interaction.getReportPage())
   return app.use("/", router);
 }

@@ -33,7 +33,7 @@ export class WebPageComponent implements OnInit {
   modalRef: BsModalRef;
   confirmRef: BsModalRef;
   currentId;
-  cols = ['Id', 'Title', 'Url', 'Create', ''];
+  cols = ['Id', 'Title', 'Url', 'Created', ''];
   form: FormGroup;
   constructor(
     private svc: BaseService,
@@ -90,14 +90,14 @@ export class WebPageComponent implements OnInit {
   }
 
   goTo(item) {
-    this.router.navigateByUrl('/web-setting/' + item.id)
+    this.router.navigateByUrl('/web-page/' + item.id)
   }
 
   isError(key, errorKey) {
     if (!errorKey) {
-      return this.form.get(key).invalid && (this.form.dirty || this.form.get(key).touched)
+      return this.form.get(key).invalid && (this.form.get(key).dirty || this.form.get(key).touched)
     }
-    return this.form.get(key).hasError(errorKey) && (this.form.dirty || this.form.get(key).touched)
+    return this.form.get(key).hasError(errorKey) && (this.form.get(key).dirty || this.form.get(key).touched)
   }
 
   submit() {
@@ -113,7 +113,17 @@ export class WebPageComponent implements OnInit {
     this.closeModal();
     this.form.reset();
     this.svc.makePost(`${API.SETTING_PAGE_LIST}/save`, saveItem).subscribe((data: any) => {
-      this.toastr.success('Save successfully!', '', { positionClass: 'toast-top-right' });
+      this.toastr.success(
+        '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Save successfully!</span>',
+        '',
+        {
+          timeOut: 3000,
+          closeButton: true,
+          enableHtml: true,
+          toastClass: 'alert alert-success alert-with-icon',
+          positionClass: 'toast-top-right'
+        }
+      );
       this.loadData();
    })
   }

@@ -1,0 +1,96 @@
+/* You can add global styles to this file, and also import other style files */
+.max-line-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.btn {
+  margin: 0;
+}
+
+.cursor-poiter {
+  cursor: pointer;
+}
+
+.float-right {
+  float: right;
+}
+
+.url-btn {
+  color: #51cbce!important;
+  cursor: pointer;
+}
+
+.url-btn:hover {
+  text-decoration: underline!important;
+}
+
+.red {
+  color: red;
+}
+
+ng-select:focus {
+  border: 1px solid #9A9A9A;
+  box-shadow: none;
+  outline: 0 !important;
+  color: #66615B;
+}
+
+
+
+.is-invalid{
+  .ng-select-container{
+    border-color: red!important
+  }
+  .ck.ck-reset.ck-editor.ck-rounded-corners{
+    border: 1px solid red!important;
+  }
+}
+
+.show {
+  display: block!important;
+}
+
+.col-Active {
+  width: 150px;
+}
+
+
+.table-container {
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.web-page-table {
+  max-height: 60vh;
+}
+
+.url-container {
+  max-width: 80%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.select {
+  width: 200px;
+}
+
+.modal-content {
+  // width: 70vw;
+}
+
+.col-CreateBy {
+  min-width: 100px;
+}
+.col-PublishDate {
+  min-width: 130px;
+}
+
+.col-Source {
+  min-width: 110px;
+}

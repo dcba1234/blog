@@ -1,5 +1,17 @@
 export enum API {
   BASE_URL = 'http://localhost:8000',
   SETTING_WEB = '/setting-web',
-  SETTING_PAGE_LIST = '/setting-web'
+  SETTING_PAGE_LIST = '/setting-web',
+  SETTING_PAGE_DETAIL = '/setting-page',
+  TAG = '/tag',
+  COUNTRY = '/country',
+  GENDER = '/gender',
+  CATEGORY_ALL = '/category/all',
+  CATEGORY= '/category',
+  DATA = '/data',
+  SETTING_WEB_SAVE = '/setting-web/save',
+  POST = '/post',
+  POST_ACTIVE = '/post/active',
+  POST_DEACTIVE = '/post/deactive',
+  REPORT = '/report',
 };

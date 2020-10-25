@@ -1,0 +1,114 @@
+<form [formGroup]="form">
+  <div class="row">
+    <div class="col-7">
+      <div class="form-group">
+        <label for="exampleInputEmail1"
+          >Page Url<span class="red"> *</span></label
+        >
+        <input formControlName="url" class="form-control" placeholder="Enter url" />
+        <small id="emailHelp" class="form-text text-muted"
+          >Current Data: <a [href]="currentUrl">{{currentUrl}}</a></small
+        >
+      </div>
+      
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary">Reload Web</button>
+  <button type="button" class="btn ml-3 btn-primary" (click)="saveSetting()">Save setting</button>
+  <hr />
+  <div class="d-flex">
+    <h3>Article infomation</h3>
+  </div>
+  <div class="row">
+    <div class="col-7">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Title<span class="red"> *</span></label>
+        <input formControlName="title" class="form-control" [class.is-invalid]="this.isError('title','')"  placeholder="Enter title" />
+        <div class="invalid-feedback">
+          This field is required
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-9">
+          <label for="exampleInputEmail1">Tag<span class="red"> *</span></label>
+          <ng-select
+            [items]="[]"
+            [addTag]="true"
+            [multiple]="true"
+            [selectOnTab]="true"
+            [isOpen]="false"
+            formControlName="tag"
+            [class.is-invalid]="this.isError('tag','')" 
+          >
+          </ng-select>
+          <div class="invalid-feedback" [class.show]="this.isError('tag','')">
+            This field is required
+          </div>
+        </div>
+        <div class="col-3">
+          <label for="exampleInputEmail1"
+            >Category<span class="red"> *</span></label
+          >
+          <ng-select
+            placeholder="select"
+            [items]="categorys"
+            bindLabel="title"
+            bindValue="id"
+            formControlName="categoryId"
+            [class.is-invalid]="this.isError('categoryId','')" 
+          >
+          </ng-select>
+          <div class="invalid-feedback" [class.show]="this.isError('categoryId','')">
+            This field is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1">Summary<span class="red"> *</span></label>
+        <textarea [class.is-invalid]="this.isError('summary','')" formControlName="summary" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <div class="invalid-feedback">
+          This field is required
+        </div>
+      </div>
+      <div class="form-group">
+        <ckeditor [class.is-invalid]="this.isError('content','')"  formControlName="content" class="ckeditor" [editor]="Editor" data="<div class='ckeditor-body '></div>"></ckeditor>
+        <div class="invalid-feedback"  [class.show]="this.isError('content','')">
+          This field is required
+        </div>
+      </div>
+    </div>
+    <div class="col-3 ">
+      <div class="right-container" formArrayName="elements">
+        <button type="button" (click)="saveArticle()" class="add-rule btn btn-primary mb-2">Publish Article</button>
+        <button type="button" (click)="addElements()" class="add-rule btn btn-outline-primary mb-3">Add rule</button>
+        <!-- <div class="add-rule">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+           ADD MORE
+        </div> -->
+        <div class="right-area">
+          <div class="right-item" *ngFor="let item of elementsForm.controls, index as i">
+            <!-- <span>{{item.title}}</span> -->
+            <i (click)="removeElement(i)" class="fa fa-times close" aria-hidden="true"></i>
+            <ng-container [formGroupName]="i">
+              <input class="form-control mb-2 selector-input" formControlName="selector" placeholder="JQuery selector" />
+              <ng-select
+                formControlName="postProperty"
+                placeholder="select"
+                [items]="postProperty"
+                bindLabel="title"
+                bindValue="id"
+              ></ng-select>
+            </ng-container>
+          
+            <hr>
+            <button type="button" (click)="parseData(item.value)" class="btn btn-primary w-100">Get data</button>
+          </div>
+       </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div style="display: none;" [innerHTML]="htmlData">
+
+</div>

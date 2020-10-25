@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { API } from './constant.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BaseService {
-
+  isLoading = new BehaviorSubject(false);
   constructor(private http: HttpClient) { }
 
   makeGet(url, params?) {

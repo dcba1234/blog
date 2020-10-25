@@ -1,0 +1,51 @@
+.select {
+  width: 200px;
+}
+
+:host ::ng-deep .ck-editor__editable_inline {
+  min-height: 500px;
+}
+
+.right-item {
+  background-color: white;
+  padding: 10px 15px 10px 15px;
+  border: 1px solid #ccc;
+  margin: 10px 15px 5px 15px;
+}
+
+.right-container {
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 100px;
+}
+// #51bcda
+
+.add-rule {
+  margin-left: 15px;
+  margin-right: 15px;
+
+}
+
+.selector-input {
+  font-size: 14px;
+}
+
+.close {
+  color: red;
+  position: absolute;
+  right: 5px;
+  top: 0;
+  cursor: pointer;
+}
+
+.right-item {
+  position: relative;
+  padding-top: 30px;
+}
+
+.right-area {
+  overflow-y: auto;
+  padding-bottom: 100px;
+}

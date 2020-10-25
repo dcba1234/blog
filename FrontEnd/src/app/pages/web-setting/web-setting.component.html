@@ -1,4 +1,5 @@
 <div class="setting-container">
+  <form [formGroup]="form">
   <div class="row ">
     <!-- <div class="input-group no-border col-3">
       <input type="text" value="" class="form-control" placeholder="Search...">
@@ -13,7 +14,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text pr-2" id="inputGroupPrepend2"><i class="fa fa-search" aria-hidden="true"></i></span>
         </div>
-        <input type="text" class="form-control" id="validationDefaultUsername" placeholder="Enter key word . . ." aria-describedby="inputGroupPrepend2" required>
+        <input formControlName="key" type="text" class="form-control" id="validationDefaultUsername" placeholder="Enter key word . . ." aria-describedby="inputGroupPrepend2" required>
       </div>
     </div>
     <div class="col-2 no-border">
@@ -23,6 +24,7 @@
       </div>
     </div>
   </div>
+</form>
   <div class="row">
     <div *ngFor="let item of this.dataSource.rows" class="col-4">
       <card heightFixed="240px" class="card-height-fixed">
@@ -47,22 +49,31 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="form">
+    <form [formGroup]="formSave">
       <div class="form-group">
-        <label for="exampleInputEmail1">Title</label>
-        <input required type="text" class="form-control" formControlName="title" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+        <label for="exampleInputEmail1">Title<span class="red"> *</span></label>
+        <input type="text" class="form-control" [class.is-invalid]="this.isError('title','')" formControlName="title" placeholder="">
+        <div class="invalid-feedback" >
+          This field is required
+        </div>
       </div>
       <div class="form-group">
-        <label for="exampleInputPassword1">Note</label>
-        <textarea class="form-control" formControlName="note" id="exampleInputPassword1" placeholder=""></textarea>
+        <label for="exampleInputPassword1">Note<span class="red"> *</span></label>
+        <textarea class="form-control" [class.is-invalid]="this.isError('note','')" formControlName="note" id="exampleInputPassword1" placeholder=""></textarea>
+        <div class="invalid-feedback" >
+          This field is required
+        </div>
       </div>
       <div class="form-group">
-        <label for="exampleInputEmail1">Url</label>
-        <input type="text" class="form-control" formControlName="url" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+        <label for="exampleInputEmail1">Url<span class="red"> *</span></label>
+        <input type="text" class="form-control" [class.is-invalid]="this.isError('url','')" formControlName="url" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+        <div class="invalid-feedback" >
+          This field is required
+        </div>
       </div>
       <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-secondary mr-2">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" (click)="closeModal()" class="btn btn-secondary mr-2">Close</button>
+        <button type="submit" (click)="submit()" class="btn btn-primary">Save</button>
       </div>
     </form>
   </div>
