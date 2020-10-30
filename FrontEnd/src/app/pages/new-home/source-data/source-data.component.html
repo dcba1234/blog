@@ -1,0 +1,8 @@
+<div class="container-category">
+  <div *ngFor="let item of dataSource.rows" (click)="goTo(item)" class="item">
+    <div>
+      <h5>{{item.title}}</h5><br>
+      <a [href]="item.url">{{item.url}}</a>
+    </div>
+  </div>
+</div>

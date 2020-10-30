@@ -40,6 +40,43 @@ class InteractionController {
       res.json(dt[1])
     }
   }
+
+
+  //SELECT Post_Slug, COUNT(Post_Slug) FROM `post_interaction` GROUP by Post_Slug ORDER BY COUNT(Post_Slug) DESC limit 10 OFFSET 0
+  getReportSumPage() {//  additionQuery: ` where ${this.tablesName}.Is_Active = true`,
+    return async (req, res) => { 
+      const columns: dbColunm[] = [{id: 'Post_Slug'}, {id: 'COUNT(Post_Slug)', title: 'count'}]
+      let key = '';
+      if(req.query.key) {
+        key = `( ${this.tablesName}.Post_Slug like ${db.escape('%'+req.query.key.trim()+'%')} ) `
+      }
+      const limit = req.query.size || 10;
+      // page number
+      const page = req.query.page || 1;
+      // calculate offset
+      const dt: [any, ISettingWeb[]] = await sqlHelper.getPage({...this.defaultInfo, columns,
+        additionQuery: ` where ${this.tablesName}.Post_Slug = post.Slug and post.Is_Active = 1 `,
+        additionTable: ' post ',
+        groupBy: ` Post_Slug `,
+        filterQuery: key? key : undefined,
+        orderQuery: `${req.query.orderBy? ` ORDER BY ${req.query.orderBy}` : ''}`
+       }, limit, page);
+        
+      await Promise.all(dt[1].map(async (i) => {
+        i.modifiedBy = (await sqlHelper.getUser(i.modifiedBy))[0];
+        i.createdBy = (await sqlHelper.getUser(i.createdBy))[0];
+      }))
+      const resDt:ResponseData = {
+        page: 1,
+        total: dt[0][0].total,
+        rows: dt[1],
+        itemPerPage: limit
+      }
+      res.json(resDt)
+    }
+  }
+
+
   //SELECT Post_Slug, COUNT(Post_Slug) FROM `post_interaction` GROUP by Post_Slug
   getReportPage() {//  additionQuery: ` where ${this.tablesName}.Is_Active = true`,
     return async (req, res) => { 
@@ -104,8 +141,6 @@ class InteractionController {
   delete() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`;
-      console.log(q);
-      
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -114,7 +149,6 @@ class InteractionController {
   deactive() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -123,7 +157,6 @@ class InteractionController {
   active() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = true WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }

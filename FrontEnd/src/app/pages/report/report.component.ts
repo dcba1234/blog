@@ -16,24 +16,20 @@ export class ReportComponent implements OnInit {
   modalRef: BsModalRef;
   orderDataSource = [
     {
-      id: 'Created',
-      label: 'Created'
+      id: 'Count(slug) desc',
+      label: 'Users Desc'
     },
     {
-      id: 'Reason desc',
-      label: 'Reason desc'
-    },
-    {
-      id: 'Reason asc',
-      label: 'Reason asc'
+      id: 'Count(slug) asc',
+      label: 'Users Asc'
     },
     {
       id: 'Post_Slug desc',
-      label: 'Slug asc'
+      label: 'Slug Asc'
     },
     {
       id: 'Post_Slug desc',
-      label: 'Slug asc'
+      label: 'Slug Desc'
     },
   ]
   dataSource = {
@@ -54,7 +50,7 @@ export class ReportComponent implements OnInit {
     ignoreBackdropClick: true,
     class: 'modal-s modal-dialog-centered'
   };
-  cols = ['Id', 'Post Slug', 'Reason', 'Reason (Other)' , 'Create By', 'Created', 'Active'];
+  cols = ['Id', 'Post Slug', 'Users Reports', 'Action'];
   currentPage = 1;
   currentId;
   currentItem
@@ -68,12 +64,17 @@ export class ReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.loadData();
+    this.activeRoute.queryParams.subscribe((params) => {
+      if (params.slug) {
+        this.form.patchValue({ key: params.slug })
+      }
+      this.loadData();
+    })
   }
 
   initForm() {
     this.form = this.fb.group({
-      orderBy: ['Created'],
+      orderBy: ['Count(slug) desc'],
       key: ['']
     })
     this.formSave = this.fb.group({

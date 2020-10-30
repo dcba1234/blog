@@ -31,8 +31,48 @@ import { CountryComponent } from './pages/country/country.component';
 import { UserManagerComponent } from './pages/user-manager/user-manager.component';
 import { NotificationComponent } from './pages/notification/notification.component';
 import { ReportComponent } from './pages/report/report.component';
+import { ReportSumComponent } from './pages/report-sum/report-sum.component';
+import { ReportDetailComponent } from './pages/report/report-detail/report-detail.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { NewHomeComponent } from './pages/new-home/new-home.component';
+import { NewAreaComponent } from './pages/new-home/new-area/new-area.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { NewCategoryComponent } from './pages/new-category/new-category.component';
+import { SourceDetailComponent } from './pages/new-home/source-detail/source-detail.component';
+import { HomeCategoryComponent } from './pages/new-home/home-category/home-category.component';
+import { SourceListComponent } from './pages/new-home/source-list/source-list.component';
+import { SourceDataComponent } from './pages/new-home/source-data/source-data.component';
+import { NewDetailComponent } from './pages/new-home/new-detail/new-detail.component';
 @NgModule({
-  declarations: [AppComponent, AdminLayoutComponent, WebSettingComponent, CardComponent, WebPageComponent, WebSettingDetailComponent, ArticlesComponent, CategoryComponent, GenderComponent, CountryComponent, UserManagerComponent, NotificationComponent, ReportComponent],
+  declarations: [
+    AppComponent,
+    AdminLayoutComponent,
+    WebSettingComponent,
+    CardComponent,
+    WebPageComponent,
+    WebSettingDetailComponent,
+    ArticlesComponent,
+    CategoryComponent,
+    GenderComponent,
+    CountryComponent,
+    UserManagerComponent,
+    NotificationComponent,
+    ReportComponent,
+    ReportSumComponent,
+    ReportDetailComponent,
+    LoginComponent,
+    RegisterComponent,
+    NewHomeComponent,
+    NewAreaComponent,
+    HomePageComponent,
+    NewCategoryComponent,
+    SourceDetailComponent,
+    HomeCategoryComponent,
+    SourceListComponent,
+    SourceDataComponent,
+    NewDetailComponent,
+  ],
   imports: [
     BrowserAnimationsModule,
     RouterModule.forRoot(AppRoutes, {
@@ -58,8 +98,7 @@ import { ReportComponent } from './pages/report/report.component';
     NgDragDropModule.forRoot(),
     DragulaModule.forRoot(),
     LoadingBarModule,
-    LoadingBarHttpClientModule
-
+    LoadingBarHttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

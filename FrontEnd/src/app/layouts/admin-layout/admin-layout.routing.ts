@@ -20,6 +20,7 @@ import { NotificationsComponent } from '../../pages/notifications/notifications.
 import { UpgradeComponent } from '../../pages/upgrade/upgrade.component';
 
 export const AdminLayoutRoutes: Routes = [
+    { path: '',    redirectTo: 'home', pathMatch: 'full' },
     { path: 'home',      component: DashboardComponent },
     { path: 'web-setting',      component: WebSettingComponent },
     { path: 'user',           component: UserComponent },

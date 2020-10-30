@@ -1,3 +1,4 @@
+import { dashboard } from './controllers/DashboardController';
 import { post } from './controllers/postController';
 import { reason } from './controllers/reasonRPController';
 import { tag } from './controllers/TagController';
@@ -8,6 +9,8 @@ import { settingPage } from "./controllers/settingwebPageController";
 import { country } from './controllers/CountryController';
 import { gender } from './controllers/GenderController';
 import { interaction } from './controllers/interactionController';
+import { user } from './controllers/UserController';
+import { noti } from './controllers/NotiController';
 
 const express = require("express");
 const router = express.Router();
@@ -59,11 +62,24 @@ export const initAPIs = (app) => {
 
 
   router.get("/post", post.getPage())
+  router.get("/post/:slug", post.getBySlug())
   router.post("/post", post.save())
   router.delete("/post/deactive/:id", post.deactive())
   router.delete("/post/active/:id", post.active())
 
+  router.get("/user", user.getPage())
+  router.post("/login", user.login())
+  router.post("/register", user.register())
+  router.delete("/user/deactive/:id", user.deactive())
+  router.delete("/user/active/:id", user.active())
+
+  router.get("/notification", noti.getPage())
+  router.delete("/notification/deactive/:id", noti.deactive())
+  router.delete("/notification/active/:id", noti.active())
 
   router.get("/report", interaction.getReportPage())
+  router.get("/report/sum", interaction.getReportSumPage())
+
+  router.get("/dashboard", dashboard.getAll())
   return app.use("/", router);
 }

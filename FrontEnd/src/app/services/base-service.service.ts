@@ -14,7 +14,7 @@ export class BaseService {
     const option = {
       params
     }
-    return this.http.get(API.BASE_URL + url, option);
+    return this.http.get<any>(API.BASE_URL + url, option);
   }
 
   makePost(url, data, option?) {

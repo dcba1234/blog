@@ -1,0 +1,48 @@
+<div class="title-container d-flex">
+  <span>
+    {{item.title}}
+  </span>
+  <a [routerLink]="'category/'+ item.id ">Xem thêm</a>
+</div>
+<div class="row" *ngIf="dataSource.length > 0">
+  <div class="col-6">
+    <div class="card">
+      <img class="card-img-top" [src]="dataSource[0].avatar" alt="Card image cap">
+      <div class="card-body">
+        <h5 [routerLink]="['/home/detail/' + dataSource[0].slug]" class="card-title">{{dataSource[0].title}}</h5>
+        <div class="tag mb-2">
+          <div *ngFor="let tag of dataSource[0].tag"  class="tag-content">
+            {{tag.Tag}}
+          </div>
+        </div>
+        <p class="card-text">{{dataSource[0].summary}}</p>
+        By <a [routerLink]="['/home/all']" [queryParams]="{source: dataSource[0].sourceId}" class="link">{{dataSource[0].source}} </a>  <span class="date">{{getDate(dataSource[0].created)}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <!-- <div class="grid">
+      <div class="grid-item" *ngFor="let post of dataSource2">
+        <div class="card">
+          <img class="card-img-top" [src]="post.avatar" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title max-line-2">{{post.title}}</h5>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="grid-container">
+      <div class="grid-item-2" *ngFor="let post of dataSource2">
+        <div class="card">
+          <img class="card-img-top" [src]="post.avatar" alt="Card image cap">
+          <div class="card-body">
+            <h5 [routerLink]="['/home/detail/' + post.slug]" class="card-title max-line-2">{{post.title}}</h5>
+            <span class="date">{{getDate(post.created)}}</span>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

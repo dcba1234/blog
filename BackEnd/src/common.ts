@@ -11,7 +11,7 @@ class SqlHelper {
       info.columns
     )} ${
       info.removeDefaultColumn ? "" : defaultColumns(info.tablesName)
-    } from ${info.tablesName}, user`;
+    } from ${info.tablesName}`;
     q += info.additionQuery? info.additionQuery : '';
     if(info.filterQuery) {
       if(info.additionQuery) {
@@ -24,20 +24,22 @@ class SqlHelper {
     return Promise.all([this.getTotal(info), getDataFromQuery(q, data)])
   }
 
-  async getPer(info: sqlHelperInfo, data?: any): Promise<any> {
+  async getPer(info: sqlHelperInfo, data?: any, user?): Promise<any> {
     let q = `select ${info.tablesName}.Id as id, ${genSelectQuery(
       info.columns
     )} ${
       info.removeDefaultColumn ? "" : defaultColumns(info.tablesName)
-    } from ${info.tablesName}, user`;
+    } from ${info.tablesName}`;
+       q += user? user : ''
        q += info.additionQuery? info.additionQuery : '';
+       console.log(q );
+       
     return getDataFromQuery(q, data)
   }
 
   async save(tableName, data): Promise<any> { //'2020-10-22 16:16:22'
     let q = `INSERT INTO ${tableName} SET ?`;
     if(data.id) {
-      console.log(data);
       q = `UPDATE ${tableName} SET ? WHERE Id = ?`;
       let id = data.id;
       delete data.id
@@ -67,10 +69,12 @@ class SqlHelper {
         }
         q += info.filterQuery;
       }
+      if(info.groupBy) {
+        q += ` group by ${info.groupBy} `
+      }
       if(info.orderQuery) {
         q += info.orderQuery;
       }
-
       q += " limit " + limit + " OFFSET " + offset;
       console.log(q, ' this query');
       
@@ -89,7 +93,64 @@ class SqlHelper {
     q += info.filterQuery? ' where' + info.filterQuery : '';
     return getDataFromQuery(q, data)
   }
-  async getUser(account: any): Promise<any> {
+
+  getTotalWithQuery(info: sqlHelperInfo, data?) {
+    let q = `select count(*) as total from ${info.tablesName}`;
+    q += info.additionQuery? info.additionQuery : '';
+    console.log(q);
+    
+    return getDataFromQuery(q, data)
+  }
+
+  async getUserValidate(account: any, password): Promise<any> {
+    if(!account) return [];
+    if(!password) return [];
+    const col = [
+      {
+        id: "Account",
+      },
+      {
+        id: "First_Name",
+      },
+      {
+        id: "Last_Name",
+      },
+      {
+        id: "Email",
+      },
+      {
+        id: "Date_Of_Birth",
+      },
+      {
+        id: "Introduce",
+      },
+      {
+        id: "Avatar",
+      },
+      {
+        id: "Role",
+      },
+      {
+        id: "Last_Login",
+      },
+    ];
+    let q = `select ${genSelectQuery(
+      col
+    )}, master_country.Id as countryId, master_country.Title as country,
+     master_gender.Id as genderId, master_gender.Title as gender FROM user 
+     left join master_gender on master_gender.Id = user.Gender_Id 
+     left join master_country on master_country.Id = user.Country_Id 
+     where Account = ?`;
+    //  user.Gender_Id = master_gender.Id and user.Country_Id = master_country.Id and
+     if(password) {
+      q += ` and Password = ? `
+     }
+     console.log(account, password);
+      console.log(q);
+    return getDataFromQuery(q, account, password);
+  }
+
+  async getUser(account: any, password?): Promise<any> {
     if(!account) return {};
     const col = [
       {
@@ -120,22 +181,26 @@ class SqlHelper {
         id: "Last_Login",
       },
     ];
-    const q = `select ${genSelectQuery(
+    let q = `select ${genSelectQuery(
       col
     )}, master_country.Id as countryId, master_country.Title as country,
      master_gender.Id as genderId, master_gender.Title as gender FROM user, master_gender, master_country 
      where user.Gender_Id = master_gender.Id and user.Country_Id = master_country.Id and Account = ?`;
-     //console.log(account);
      
-    return getDataFromQuery(q, account);
+     if(password) {
+      q += ` and Password = ? `
+     }
+     console.log(account, password);
+    //  console.log(q);
+    return getDataFromQuery(q, account, password);
   }
 }
-export const getDataFromQuery = async (query: string, data?, Id?) =>
+
+
+
+export const getDataFromQuery: any = async (query: string, data?, Id?) =>
   new Promise((resolve, reject) => {
     let sql = query;
-    //console.log(sql);
-    console.log(data);
-    
     db.query(sql, [data, Id], (err, response) => {
       if (err) {
         throw err;
@@ -162,6 +227,7 @@ export interface sqlHelperInfo {
   additionTable?: string;
   filterQuery?: string;
   orderQuery? : string;
+  groupBy?: string;
 }
 
 export function genSelectQuery(cols: dbColunm[]) {
@@ -194,6 +260,6 @@ export function removeAccents(str) {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s\s+/g, ' ').replace(/\s/g, '-');
 }
 
-export function getUser() {
+export function getUser(req) {
   return 'thanhnnt';
 }

@@ -19,9 +19,9 @@
   
     </div>
   </form>
-  <div class="d-flex flex-row-reverse">
+  <!-- <div class="d-flex flex-row-reverse">
     <button (click)="openModal(template)" class="btn btn-info">Add New</button>
-  </div>
+  </div> -->
   <table class="table table-bordered web-page-table mt-3">
     <thead>
       <tr>
@@ -31,25 +31,18 @@
     <tbody>
       <tr *ngFor="let item of dataSource.rows">
         <th scope="row">{{item.id}}</th>
-        <td> <a href="#" class="max-line-2 slug">{{item.postSlug}}</a></td>
-        <td>{{item.reasonReport}}</td>
-        <td>{{item.reasonReportOther}}</td>
-        <td>{{item.createdBy?.account}}</td>
-        <td>{{item.created | date:'dd/MM/yyyy'}}</td>
+        <td> <a [routerLink]='"/articles"' [queryParams]="{slug: item.postSlug}" class="max-line-2 slug">{{item.postSlug}}</a></td>
+        <td>{{item.count}}</td>
         <td>
           <a (click)="openModal(template, item)" class="url-btn">
-            Edit
-          </a>
-          |
-          <a (click)="openConfirm(templateConfirm, item)" class="url-btn">
-            {{item.isActive? 'Deactive' : 'Active'}}
+            Detail
           </a>
         </td>
       </tr>
     </tbody>
   </table>
   <div class="d-flex justify-content-end"> 
-    <pagination [(ngModel)]="currentPage" [totalItems]="dataSource.total" (pageChanged)="pageChange($event)" maxSize="5"></pagination>
+    <pagination [(ngModel)]="currentPage" [totalItems]="dataSource.total" (pageChanged)="pageChange($event)" ></pagination>
   </div>
 </div>
 
@@ -57,35 +50,13 @@
 <ng-template #template>
   <div> 
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Create New</h4>
+    <h4 class="modal-title pull-left">Detail</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="formSave">
-      <div class="form-group">
-        <label for="exampleInputEmail1">Title<span class="red"> *</span></label>
-        <input type="text" class="form-control" [class.is-invalid]="this.isError('title','')" formControlName="title" placeholder="">
-        <div class="invalid-feedback" >
-          This field is required
-        </div>
-      </div>
-      <div class="d-flex justify-content-end">
-        <button type="button" (click)="closeModal()" class="btn btn-secondary mr-2">Close</button>
-        <button type="submit" (click)="submit()" class="btn btn-primary">Save</button>
-      </div>
-
-    </form>
+    <report-detail [slug]="currentItem.postSlug"></report-detail>
   </div>
 </div>
-</ng-template>
-
-
-<ng-template #templateConfirm>
-  <div class="modal-body text-center">
-    <p>Do you want to delete?</p>
-    <button type="button" class="btn btn-default mr-1" (click)="confirm()" >Yes</button>
-    <button type="button" class="btn btn-primary" (click)="closeConfirmModal(templateConfirm)" >No</button>
-  </div>
 </ng-template>

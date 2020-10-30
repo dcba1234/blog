@@ -1,0 +1,31 @@
+<div *ngIf="this.dataSource">
+  <div class="row">
+    <div class="col-9">
+      <h3>
+        {{this.dataSource.title}}
+      </h3>
+      <p>
+        {{this.dataSource.summary}}
+      </p>
+      <div class="tag mb-2">
+        <div *ngFor="let tag of this.dataSource.tag"  class="tag-content">
+          {{tag.Tag}}
+        </div>
+      </div>
+      <div class="content" [innerHTML]='this.dataSource.content'>
+    
+      </div>
+    </div>
+    <div class="col-3">
+      <!-- <div class="new-info">
+        <p>
+          by {{this.dataSource.source}}
+        </p>
+        <div class="like">
+
+          <i class="like fa-2x fa fa-thumbs-up" aria-hidden="true"></i> {{this.dataSource.like}}
+        </div>
+      </div> -->
+    </div>
+  </div>
+</div>

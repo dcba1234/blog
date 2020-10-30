@@ -94,3 +94,56 @@ ng-select:focus {
 .col-Source {
   min-width: 110px;
 }
+
+.tag {
+  color: white;
+  display: flex;
+}
+
+.tag-content {
+  background-color: #2FB5FA;
+  padding: 3px 10px 3px 10px;
+  border-radius: 3px;
+  margin-right: 4px;
+  font-size: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-columns: auto auto;
+}
+
+.grid-item-2 {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.grid-container {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-columns: auto auto;
+  height: calc(100% - 20px);
+  grid-row-gap: 10px;
+  h5 {
+    font-size: 14px!important;
+    font-size: 14px !important;
+    text-align: initial;
+    font-weight: 600;
+  }
+  .card {
+    margin: 0;
+    height: 100%;
+  }
+  .card-img-top {
+    height: 155px;
+    object-fit: cover;
+  }
+}
+
+.card-title {
+  &:hover {
+    color: #2FB5FA;
+    cursor: pointer;
+  }
+}
+

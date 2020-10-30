@@ -1,6 +1,7 @@
 import { ICommon } from './Common';
 import { IUser } from './User';
 export interface IPost extends ICommon{
+  tag: any;
   title?: string;
   slug: string;
   summary?: string;

@@ -1,0 +1,14 @@
+.title-container {
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 15px;
+  span {
+    font-weight: bold;
+    font-size: 19px;
+  }
+  border-bottom: 1px solid rgb(228, 228, 228);
+}
+
+.date {
+  color: rgb(158, 158, 158);
+}

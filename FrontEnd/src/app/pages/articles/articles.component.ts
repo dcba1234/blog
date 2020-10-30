@@ -16,8 +16,12 @@ export class ArticlesComponent implements OnInit {
   confirmRef: BsModalRef;
   orderDataSource = [
     {
-      id: 'Created',
-      label: 'Created'
+      id: 'Created desc',
+      label: 'Created desc'
+    },
+    {
+      id: 'Created asc',
+      label: 'Created asc'
     },
     {
       id: 'Title desc',
@@ -67,12 +71,17 @@ export class ArticlesComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.loadData();
+    this.activeRoute.queryParams.subscribe((params) => {
+      if (params.slug) {
+        this.form.patchValue({ key: params.slug })
+      }
+      this.loadData();
+    })
   }
 
   initForm() {
     this.form = this.fb.group({
-      orderBy: ['Created'],
+      orderBy: ['Created desc'],
       key: ['']
     })
     this.form.valueChanges.subscribe((value) => {

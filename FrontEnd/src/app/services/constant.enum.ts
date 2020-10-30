@@ -13,5 +13,11 @@ export enum API {
   POST = '/post',
   POST_ACTIVE = '/post/active',
   POST_DEACTIVE = '/post/deactive',
-  REPORT = '/report',
+  REPORT = '/report/sum',
+  REPORT_DETAIL = '/report',
+  NOTIFICATION = '/notification',
+  USER = '/user',
+  DASHBOARD = '/dashboard',
+  LOGIN = '/login',
+  REGISTER = '/register',
 };

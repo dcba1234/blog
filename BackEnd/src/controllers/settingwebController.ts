@@ -86,8 +86,8 @@ class settingwebController {
       })
       dataSave.Modified = moment().format('YYYY-MM-DD hh:mm:ss');
       dataSave.Created = moment().format('YYYY-MM-DD hh:mm:ss');
-      dataSave.Created_By = getUser();
-      dataSave.Modified_By = getUser();
+      dataSave.Created_By = getUser(req);
+      dataSave.Modified_By = getUser(req);
       dataSave.Is_Active = true;
       if(id) {
         delete dataSave.Created;

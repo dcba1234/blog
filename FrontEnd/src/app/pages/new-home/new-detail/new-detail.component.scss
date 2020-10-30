@@ -1,0 +1,33 @@
+.align-center {
+  text-align: center;
+}
+
+.content {
+  overflow: hidden;
+  .align-center {
+    text-align: center;
+  } 
+  .image {
+    text-align: center;
+  }
+}
+
+.new-info {
+  margin-top: 10px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  position: sticky;
+  top: 130px;
+  padding: 10px;
+}
+
+.like {
+  height: 30px;
+  cursor: pointer;
+
+}
+
+.video {
+  width: 100%;
+}

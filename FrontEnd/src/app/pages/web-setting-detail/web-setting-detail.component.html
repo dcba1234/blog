@@ -12,8 +12,12 @@
       </div>
       
     </div>
+    <div class="col-5">
+      <p>Avatar</p>
+      <img style="width: 125px;" [src]="this.form.get('avatar').value" alt="">
+    </div>
   </div>
-  <button type="button" class="btn btn-primary">Reload Web</button>
+  <button type="button" (click)="reloadPage()" class="btn btn-primary">Reload Web</button>
   <button type="button" class="btn ml-3 btn-primary" (click)="saveSetting()">Save setting</button>
   <hr />
   <div class="d-flex">
@@ -21,6 +25,13 @@
   </div>
   <div class="row">
     <div class="col-7">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Avatar Url<span class="red"> *</span></label>
+        <input formControlName="avatar" class="form-control" [class.is-invalid]="this.isError('avatar','')"  placeholder="Enter avatar url" />
+        <div class="invalid-feedback">
+          This field is required
+        </div>
+      </div>
       <div class="form-group">
         <label for="exampleInputEmail1">Title<span class="red"> *</span></label>
         <input formControlName="title" class="form-control" [class.is-invalid]="this.isError('title','')"  placeholder="Enter title" />
@@ -80,6 +91,7 @@
     <div class="col-3 ">
       <div class="right-container" formArrayName="elements">
         <button type="button" (click)="saveArticle()" class="add-rule btn btn-primary mb-2">Publish Article</button>
+        <button type="button" (click)="parseAll()" class="add-rule btn btn-outline-primary mb-2">Get All</button>
         <button type="button" (click)="addElements()" class="add-rule btn btn-outline-primary mb-3">Add rule</button>
         <!-- <div class="add-rule">
           <i class="fa fa-plus" aria-hidden="true"></i>

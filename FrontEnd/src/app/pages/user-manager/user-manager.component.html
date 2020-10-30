@@ -1,1 +1,94 @@
-<p>user-manager works!</p>
+
+<div class="table-container ">
+  <form [formGroup]="form">
+   <div class="row">
+      <div class="col-4 d-flex align-items-center">
+        <span class="mr-2">Order By</span>
+        <select formControlName="orderBy" class="form-control select ">
+          <option *ngFor="let item of orderDataSource" [value]="item.id">{{item.label}}</option>
+        </select>
+      </div>
+      <div class="input-group no-border offset-5 col-3">
+        <input type="text" formControlName="key" class="form-control" placeholder="Search...">
+        <div class="input-group-append">
+          <div class="input-group-text">
+            <i class="nc-icon nc-zoom-split"></i>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </form>
+  <div class="d-flex flex-row-reverse">
+    <!-- <button (click)="openModal(template)" class="btn btn-info">Add New</button> -->
+  </div>
+  <table class="table table-bordered web-page-table mt-3">
+    <thead>
+      <tr>
+        <th *ngFor="let col of cols" [class]='getClass(col)'>{{col}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of dataSource.rows">
+        <td scope="row">{{item.account}}</td>
+        <td scope="row">{{item.email}}</td>
+        <td>{{item.firstName + ' ' + item.lastName}}</td>
+        <td>{{item.dateOfBirth | date:'dd/MM/yyyy'}}</td>
+        <td>{{item.created | date:'dd/MM/yyyy'}}</td>
+        <td>
+          <a (click)="openConfirm(templateConfirm, item)" class="url-btn">
+            {{item.isActive? 'Deactive' : 'Active'}}
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-end"> 
+    <pagination [(ngModel)]="currentPage" [totalItems]="dataSource.total" (pageChanged)="pageChange($event)" ></pagination>
+  </div>
+</div>
+
+
+<!-- <ng-template #template>
+  <div> 
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Create New page</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Title<span class="red"> *</span></label>
+        <input type="text" class="form-control" [class.is-invalid]="this.isError('title','')" formControlName="title" placeholder="">
+        <div class="invalid-feedback" >
+          This field is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Url<span class="red"> *</span></label>
+        <textarea class="form-control" [class.is-invalid]="this.isError('url','')" formControlName="url" placeholder=""></textarea>
+        <div class="invalid-feedback">
+          This field is required
+        </div>
+      </div>
+      <a target="_blank" [href]="this.form.get('url').value">Go to {{this.form.get('url').value}}</a>
+      <div class="d-flex justify-content-end">
+        <button type="button" (click)="closeModal()" class="btn btn-secondary mr-2">Close</button>
+        <button type="submit" (click)="submit()" class="btn btn-primary">Save</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+</ng-template> -->
+
+
+<ng-template #templateConfirm>
+  <div class="modal-body text-center">
+    <p>Do you want to delete?</p>
+    <button type="button" class="btn btn-default mr-1" (click)="confirm()" >Yes</button>
+    <button type="button" class="btn btn-primary" (click)="closeConfirmModal(templateConfirm)" >No</button>
+  </div>
+</ng-template>

@@ -65,7 +65,7 @@ export class WebSettingComponent implements OnInit {
   }
 
   goTo(item) {
-    this.router.navigateByUrl('/web-setting/' + item.id)
+    this.router.navigateByUrl('/admin/web-setting/' + item.id)
   }
 
   closeModal() {

@@ -1,0 +1,40 @@
+
+<div class="app-container">
+  <div class="header">
+    <div class="container">
+      <div class="row">
+        <div class="col-4" style="margin-left: -15px">
+          <div class="input-group mg-0">
+            <div class="input-group-prepend" >
+              <span id='search' class="input-group-text pr-2"><i class="fa fa-search" aria-hidden="true"></i></span>
+            </div>
+            <input [(ngModel)]='key' (keyup.enter)="onEnter()" id='search-input' type="text" class="form-control" placeholder="Enter key word . . ." aria-describedby="inputGroupPrepend2" required>
+          </div>
+        </div>
+        <div class="col-3 offset-5 d-flex align-items-center justify-content-end">
+          <div>
+            <a class="mr-2 link" [routerLink]='"/login"'>Login</a>   |   <a class="ml-2 link"  [routerLink]='"/register"'>Register</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="menu">
+          <a routerLinkActive="active"  [routerLink]='"hot"'> Hot</a>
+          <a routerLinkActive="active" [routerLink]='"all"'> All News</a>
+          <a routerLinkActive="active" [routerLink]='"category"'> Category</a>
+          <a routerLinkActive="active" [routerLink]='"source"'> Source</a>
+          <a routerLinkActive="active" [routerLink]='"dantri"'> Dantri</a>
+          <a routerLinkActive="active" [routerLink]='"vnexpress"'> VNExpress</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="container">
+    <div style="margin-left: -15px;margin-right: -15px;">
+      <router-outlet></router-outlet>
+    </div>
+    
+  </div>
+  
+</div>

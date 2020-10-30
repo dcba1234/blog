@@ -29,7 +29,8 @@ export class WebSettingDetailComponent implements OnInit {
   postProperty = [
     'content',
     'summary',
-    'title'
+    'title',
+    'avatar'
   ]
   categorys = [
   ]
@@ -86,7 +87,7 @@ export class WebSettingDetailComponent implements OnInit {
   }
 
   reloadPage() {
-
+    this.loadWebData(this.form.value);
   }
 
   saveSetting() {
@@ -97,10 +98,10 @@ export class WebSettingDetailComponent implements OnInit {
     })
   }
 
-
+  // <span data-notify="icon" class="nc-icon nc-bell-55"></span>
   makeToast() {
     this.toastr.success(
-      '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Save successfully!</span>',
+      '<span style="color: white" data-notify="message">Successfully!</span>',
       '',
       {
         timeOut: 3000,
@@ -117,12 +118,15 @@ export class WebSettingDetailComponent implements OnInit {
       console.log(d);
       this.htmlData = d.data;
       this.isDone = true;
+      this.currentUrl = data.url;
+      this.makeToast();
     })
   }
 
   buildForm() {
     this.form = this.fb.group({
       title: ['', Validators.required],
+      avatar: ['', Validators.required],
       url: ['', Validators.required],
       tag: ['', Validators.required],
       categoryId: ['', Validators.required],
@@ -136,12 +140,20 @@ export class WebSettingDetailComponent implements OnInit {
     return this.form.get('elements') as FormArray
   }
 
+  parseAll() {
+    this.elementsForm.value.map((i) => {
+      this.parseData(i);
+    })
+  }
+
   parseData(data) {
-    console.log(data);
     const dataSave = {};
     dataSave[data.postProperty] = data.postProperty === 'content' ? $(data.selector).html() : $(data.selector).text();
     dataSave[data.postProperty] = dataSave[data.postProperty] || '';
     dataSave[data.postProperty] = dataSave[data.postProperty].trim();
+    if (data.postProperty === 'avatar') {
+      dataSave[data.postProperty] = $(data.selector)[0].src;
+    }
     if (!dataSave[data.postProperty]) {
       return
     }
@@ -162,7 +174,7 @@ export class WebSettingDetailComponent implements OnInit {
     savedt.sourceId = parseInt(this.webId, 10);
     this.svc.makePost(API.POST, savedt).subscribe(() => {
       this.makeToast();
-      this.router.navigateByUrl('/articles')
+      //this.router.navigateByUrl('/admin/articles')
     })
   }
 

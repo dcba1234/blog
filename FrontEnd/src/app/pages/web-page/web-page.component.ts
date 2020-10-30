@@ -90,7 +90,7 @@ export class WebPageComponent implements OnInit {
   }
 
   goTo(item) {
-    this.router.navigateByUrl('/web-page/' + item.id)
+    this.router.navigateByUrl('/admin/web-page/' + item.id)
   }
 
   isError(key, errorKey) {
