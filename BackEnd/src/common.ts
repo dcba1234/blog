@@ -2,6 +2,9 @@ import * as _ from "lodash";
 import { join } from "path";
 import { db } from "./db";
 import * as moment from 'moment'
+import { verifyToken } from "./helper/jwt.helper";
+import { refreshTokenSecret } from "./helper/AuthMiddleware";
+import { log } from "console";
 class SqlHelper {
   table = "";
   constructor() {}
@@ -32,15 +35,14 @@ class SqlHelper {
     } from ${info.tablesName}`;
        q += user? user : ''
        q += info.additionQuery? info.additionQuery : '';
-       console.log(q );
-       
+
     return getDataFromQuery(q, data)
   }
 
-  async save(tableName, data): Promise<any> { //'2020-10-22 16:16:22'
+  async save(tableName, data, account?): Promise<any> { //'2020-10-22 16:16:22'
     let q = `INSERT INTO ${tableName} SET ?`;
     if(data.id) {
-      q = `UPDATE ${tableName} SET ? WHERE Id = ?`;
+      q = `UPDATE ${tableName} SET ? WHERE ${account? 'Account' : 'Id'} = ?`;
       let id = data.id;
       delete data.id
       return getDataFromQuery(q,data, id);
@@ -76,8 +78,7 @@ class SqlHelper {
         q += info.orderQuery;
       }
       q += " limit " + limit + " OFFSET " + offset;
-      console.log(q, ' this query');
-      
+      console.log(q)
     return Promise.all([this.getTotal(info, data), getDataFromQuery(q, data)])
   }
 
@@ -97,8 +98,6 @@ class SqlHelper {
   getTotalWithQuery(info: sqlHelperInfo, data?) {
     let q = `select count(*) as total from ${info.tablesName}`;
     q += info.additionQuery? info.additionQuery : '';
-    console.log(q);
-    
     return getDataFromQuery(q, data)
   }
 
@@ -145,8 +144,7 @@ class SqlHelper {
      if(password) {
       q += ` and Password = ? `
      }
-     console.log(account, password);
-      console.log(q);
+
     return getDataFromQuery(q, account, password);
   }
 
@@ -190,8 +188,6 @@ class SqlHelper {
      if(password) {
       q += ` and Password = ? `
      }
-     console.log(account, password);
-    //  console.log(q);
     return getDataFromQuery(q, account, password);
   }
 }
@@ -260,6 +256,24 @@ export function removeAccents(str) {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s\s+/g, ' ').replace(/\s/g, '-');
 }
 
-export function getUser(req) {
-  return 'thanhnnt';
+export async function getUser(req, isGetAll?): Promise<any> {
+  try {
+    const decoded = await verifyToken(
+      req.headers.authtoken,
+      refreshTokenSecret
+    );
+    if(!decoded){
+      return;
+    }
+    if(!isGetAll) {
+      return decoded.data.account;
+    }
+    return sqlHelper.getUser(decoded.data.account)
+  } catch (error) {
+    return '';
+  }
+ 
+
+  
+ 
 }

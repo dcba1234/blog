@@ -1,3 +1,4 @@
+import { ProfileComponent } from './pages/new-home/profile/profile.component';
 import { NewDetailComponent } from './pages/new-home/new-detail/new-detail.component';
 import { SourceDataComponent } from './pages/new-home/source-data/source-data.component';
 import { SourceListComponent } from './pages/new-home/source-list/source-list.component';
@@ -74,6 +75,10 @@ export const AppRoutes: Routes = [
       {
         path: 'detail/:slug',
         component: NewDetailComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
       }
     ]
   },

@@ -1,0 +1,42 @@
+.comment-container {
+  margin-bottom: 100px;
+}
+
+.comment {
+  height: auto !important;
+  padding: 10px !important;
+  max-height: none !important;
+}
+
+.avatar {
+  img {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 90px;
+    
+  }
+  margin-right: 10px;
+}
+
+.account {
+  color: #2fb5fa;
+}
+
+.created {
+  color:#99A3AD;
+  font-size: 11px;
+}
+
+.text {
+  width: calc(100% - 60px);
+}
+
+.link {
+  color:  #2FB5FA!important;
+  cursor: pointer;
+}
+
+.comment-item {
+  margin-bottom: 25px;
+}

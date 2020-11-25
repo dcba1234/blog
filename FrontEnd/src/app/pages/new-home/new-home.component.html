@@ -3,19 +3,47 @@
   <div class="header">
     <div class="container">
       <div class="row">
-        <div class="col-4" style="margin-left: -15px">
-          <div class="input-group mg-0">
-            <div class="input-group-prepend" >
-              <span id='search' class="input-group-text pr-2"><i class="fa fa-search" aria-hidden="true"></i></span>
+        <ng-container>
+          <div class="col-4" style="margin-left: -15px">
+            <div class="input-group mg-0">
+              <div class="input-group-prepend" >
+                <span id='search' class="input-group-text pr-2"><i class="fa fa-search" aria-hidden="true"></i></span>
+              </div>
+              <input [(ngModel)]='key' (keyup.enter)="onEnter()" id='search-input' type="text" class="form-control" placeholder="Enter key word . . ." aria-describedby="inputGroupPrepend2" required>
             </div>
-            <input [(ngModel)]='key' (keyup.enter)="onEnter()" id='search-input' type="text" class="form-control" placeholder="Enter key word . . ." aria-describedby="inputGroupPrepend2" required>
           </div>
-        </div>
-        <div class="col-3 offset-5 d-flex align-items-center justify-content-end">
-          <div>
-            <a class="mr-2 link" [routerLink]='"/login"'>Login</a>   |   <a class="ml-2 link"  [routerLink]='"/register"'>Register</a>
+          <div class="col-3 offset-5 d-flex align-items-center justify-content-end">
+            <div *ngIf="!this.user">
+              <a class="mr-2 link" [routerLink]='"/login"'>Login</a>   |   <a class="ml-2 link"  [routerLink]='"/register"'>Register</a>
+            </div>
+            <ng-container *ngIf="this.user">
+              <div id="button-basic" dropdownToggle aria-controls="dropdown-basic">
+               
+        
+                <div class="nav-item btn-rotate" ngbDropdown placement="bottom-left">
+                  
+                  <div class="nav-link menu-drop" ngbDropdownToggle id="navbarDropdownMenuLink" >
+                    <div class="avatar-info">
+                      <img [src]="this.avatar || 'assets/icon/user.png'">
+                    </div>
+                    <span class="pr-1">{{name}}  </span>
+                  </div>
+                  <div ngbDropdownMenu aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-right">
+                    <a (click)="toProfile()" ngbDropdownItem href="javascript:void(0)">My Profile</a>
+                    <a (click)="logOut()" ngbDropdownItem href="javascript:void(0)">Log Out</a>
+                  </div>
+                </div>
+       
+              </div>
+              
+
+            </ng-container>
+              
           </div>
-        </div>
+        </ng-container>
+
+       
+       
       </div>
       <div class="row">
         <div class="menu">

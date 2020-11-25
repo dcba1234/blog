@@ -44,6 +44,11 @@ import { HomeCategoryComponent } from './pages/new-home/home-category/home-categ
 import { SourceListComponent } from './pages/new-home/source-list/source-list.component';
 import { SourceDataComponent } from './pages/new-home/source-data/source-data.component';
 import { NewDetailComponent } from './pages/new-home/new-detail/new-detail.component';
+import { CommentComponent } from './pages/new-home/new-detail/comment/comment.component';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ProfileComponent } from './pages/new-home/profile/profile.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -72,6 +77,8 @@ import { NewDetailComponent } from './pages/new-home/new-detail/new-detail.compo
     SourceListComponent,
     SourceDataComponent,
     NewDetailComponent,
+    CommentComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -99,6 +106,8 @@ import { NewDetailComponent } from './pages/new-home/new-detail/new-detail.compo
     DragulaModule.forRoot(),
     LoadingBarModule,
     LoadingBarHttpClientModule,
+    NgbModule
+
   ],
   providers: [],
   bootstrap: [AppComponent],

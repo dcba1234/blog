@@ -1,3 +1,4 @@
+import { comment } from './controllers/commentController';
 import { dashboard } from './controllers/DashboardController';
 import { post } from './controllers/postController';
 import { reason } from './controllers/reasonRPController';
@@ -11,6 +12,9 @@ import { gender } from './controllers/GenderController';
 import { interaction } from './controllers/interactionController';
 import { user } from './controllers/UserController';
 import { noti } from './controllers/NotiController';
+import { settingJob } from './controllers/settingJobController';
+const  multipart  =  require('connect-multiparty');
+const  multipartMiddleware  =  multipart({ uploadDir:  './Avatar' });
 
 const express = require("express");
 const router = express.Router();
@@ -44,7 +48,7 @@ export const initAPIs = (app) => {
   router.delete("/country/active/:id", country.active())
 
 
-
+  router.get("/job", settingJob.getPage())
 
 
 
@@ -55,7 +59,7 @@ export const initAPIs = (app) => {
   router.delete("/gender/deactive/:id", gender.deactive())
   router.delete("/gender/active/:id", gender.active())
 
-
+  
 
   router.get("/reason/all", reason.getAll())
   router.get("/reason", reason.getPage())
@@ -67,19 +71,28 @@ export const initAPIs = (app) => {
   router.delete("/post/deactive/:id", post.deactive())
   router.delete("/post/active/:id", post.active())
 
+  router.post("/comment", post.postComment())
+  router.get("/comment/:slug", comment.getPage())
+
   router.get("/user", user.getPage())
   router.post("/login", user.login())
+  router.get("/info", user.getMyInfo())
+  router.post("/info", user.updateInfo())
   router.post("/register", user.register())
   router.delete("/user/deactive/:id", user.deactive())
   router.delete("/user/active/:id", user.active())
+  router.post("/user/avatar",multipartMiddleware, user.uploadAvatar())
 
   router.get("/notification", noti.getPage())
   router.delete("/notification/deactive/:id", noti.deactive())
   router.delete("/notification/active/:id", noti.active())
 
   router.get("/report", interaction.getReportPage())
+  router.post("/report", interaction.save(true))
+  router.post("/reason", interaction.getReportReason())
   router.get("/report/sum", interaction.getReportSumPage())
 
   router.get("/dashboard", dashboard.getAll())
+  app.use('/avatar', express.static('Avatar'));
   return app.use("/", router);
 }

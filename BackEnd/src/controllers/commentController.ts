@@ -9,38 +9,23 @@ import { ISettingPage } from '../models/SettingPage';
 import { db } from '../db';
 import { IPost } from '../models/Post';
 
-class postController {
-  tablesName = 'post'
+class commentController {
+  tablesName = 'comment'
   col: dbColunm[] = [
     {
-      id: 'post.Title',
-      title: 'title'
+      id: 'Id'
     },
     {
-      id: 'Slug'
+      id: 'Account'
     },
     {
-      id: 'Source_Id'
+      id: 'Post_Slug'
     },
     {
-      id: 'Category_Id'
+      id: 'Parent_Id'
     },
     {
-      id: 'Summary'
-    },
-    {
-      id: 'Avatar'
-    },
-    {
-      id: 'Publish_Date'
-    },
-    {
-      id: 'setting_web.Title',
-      title: 'source'
-    },
-    {
-      id: 'setting_web.Id',
-      title: 'settingWebId'
+      id: 'Content'
     }
   ]
   colElement: dbColunm[] = [
@@ -54,7 +39,7 @@ class postController {
       id: 'Selector'
     }
   ]
-  colSave = ['Title', 'Avatar' ,'Slug', 'Tag', 'Source_Id','Summary','Publish_Date','Category_Id','Content','Read_Time', 'Is_Active' , ...DEFAULT_COL]
+  colSave = ['Content', 'Parent_Id' ,'Post_Slug' ,'Account' ,'Content', 'Is_Active' , ...DEFAULT_COL]
   defaultInfo = {columns: this.col, tablesName:this.tablesName};
   constructor() {
 
@@ -118,18 +103,15 @@ class postController {
 
   postComment() {
     return async (req, res) => {
-      const currentUser = await getUser(req);
+      const currentUser = await getUser(req, true);
       const saveData = {
-        Parent_Id: req.body.parentId,
         Post_Slug: req.body.postSlug,
         Content: req.body.content,
         Is_Active: true,
-        Account: currentUser,
-        Modified_By: currentUser,
-        Modified: moment().format('YYYY-MM-DD hh:mm:ss'),
+        Account: currentUser.account,
         Created: moment().format('YYYY-MM-DD hh:mm:ss')
       }
-      let q = `insert into comment SET ?`;
+      let q = `insert into tag SET ?`;
       await getDataFromQuery(q, saveData);
       res.status(200).send()
     }
@@ -149,54 +131,27 @@ class postController {
   }
 
   getPage() {
+  
+
     //additionQuery: ` where ${this.tablesName}.Is_Active = true ORDER BY Created desc `
     return async (req, res) => { 
-      console.log(req.query);
-      let key = '';
-      if(req.query.key) {
-        key = `( post.Title like ${db.escape('%'+req.query.key.trim()+'%')} `
-        key += `or post.Summary like ${db.escape('%'+req.query.key.trim()+'%')} `
-        key += req.query.key == 'active'? 'or post.Is_Active = 1 ' : ''
-        key += `or post.Created_By like ${db.escape('%'+req.query.key.trim()+'%')} `
-        key += `or post.Slug like ${db.escape('%'+req.query.key.trim()+'%')} ) `
-      }
-      if(req.query.active) {
-        if(key) {
-          key += ' and '
-        }
-        key += ` post.Is_Active = 1 `
-      }
-      if(req.query.category) {
-        if(key) {
-          key += ' and '
-        }
-        key += ` Category_Id =  ${db.escape(req.query.category.trim())} `
-      }
-      if(req.query.source) {
-        if(key) {
-          key += ' and '
-        }
-        key += ` Source_Id =  ${db.escape(req.query.source.trim())} `
-      }
-      if(req.query.orderBy) {
-        
-      }
+      
+      const account = await getUser(req)
+      console.log(account);
+      let key = ` Post_Slug = ${db.escape(req.params.slug)} and Parent_Id is NULL `;
       const limit = req.query.size || 10;
       // page number
       const page = req.query.page || 1;
       // calculate offset
-      const additionQuery = ` where post.Source_Id = setting_web.Id` ;
-      const dt: [any, IPost[]] = await sqlHelper.getPage(
+      const dt: [any, any[]] = await sqlHelper.getPage(
         {...this.defaultInfo, tablesName:`${this.tablesName}`,
-         additionTable: 'setting_web', additionQuery,
          filterQuery: key? key : undefined,
-         orderQuery: `${req.query.orderBy? ` ORDER BY ${req.query.orderBy}` : ''}`
+         orderQuery: ` ORDER BY CASE Account WHEN '${account}' THEN 1 ELSE 2 END,Created DESC `
         }
         , limit, page, {key: req.query.key});
       await Promise.all(dt[1].map(async (i) => {
         i.modifiedBy = (await sqlHelper.getUser(i.modifiedBy))[0];
-        i.createdBy = (await sqlHelper.getUser(i.createdBy))[0];
-        i.tag = (await this.getTagBySlug(i.slug));
+        i.createdBy = (await sqlHelper.getUser(i.account))[0];
       }))
       const resDt:ResponseData = {
         page: 1,
@@ -210,7 +165,7 @@ class postController {
 
   save() {
     return async (req, res) => { 
-      console.log('article save');
+      
       
       let id = req.body.id;
       let dataSave: any = {}
@@ -224,10 +179,8 @@ class postController {
       dataSave.Created_By = await getUser(req);
       dataSave.Modified_By = await getUser(req);
       dataSave.Is_Active = true;
-      dataSave.Publish_Date = moment().format('YYYY-MM-DD hh:mm:ss');
-      dataSave.Read_Time = Math.floor(req.body.content.length /20) + 1;
-      dataSave.Source_Id = req.body.sourceId;
-      dataSave.Slug = removeAccents(dataSave.Title) + '-' + new Date().getTime();
+      dataSave.Account = dataSave.Created_By;
+
       //console.log(dataSave);
       await sqlHelper.save(this.tablesName, _.omit(dataSave, ['Tag']));
       await Promise.all(dataSave.Tag.map(async (tag) => {
@@ -250,7 +203,6 @@ class postController {
   deactive() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Slug = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -264,15 +216,12 @@ class postController {
   active() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = true WHERE Slug = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
   }
 
   saveTag(tag, isUpdate?) {
-    console.log(isUpdate);
-    
     let q = `insert into tag SET ?`;
     if(isUpdate) {
       q = `UPDATE tag SET Post_Count = Post_Count + 1 where tag = ?`;
@@ -295,7 +244,7 @@ class postController {
 
 
 }
-export const post = new postController();
+export const comment = new commentController();
 
 export interface ResponseData {
   page: number,

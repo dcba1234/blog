@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-9 comment-container">
+    <hr>
+    <textarea maxlength='255' placeholder="Your comment" [(ngModel)]='comment' class="form-control comment" id="exampleFormControlTextarea1" rows="4"></textarea>
+    <div class="d-flex flex-row-reverse" >
+      <button (click)="sendComment()" class="btn btn-primary mt-2">Send</button>
+    </div>
+    <div *ngIf="comments" class="comment-all mt-2">
+      <div *ngFor="let item of comments.rows" class="comment-item  d-flex">
+        <div class="avatar">
+          <img [src]="item.createdBy && item.createdBy.avatar? (baseUrl + item.createdBy.avatar) : 'assets/icon/user.png'">
+        </div>
+        <div class="text d-flex flex-column">
+          <span><span class="account">{{item.account}}</span> <span class="created">  • {{item.created | date:'dd/MM/yyyy hh:mm'}}</span></span>
+          <div class="comment-content">
+            {{item.content}}
+          </div>
+          <!-- <a class="link">Reply</a> -->
+        </div>
+      </div>
+      <div *ngIf="!isDone" class="d-flex justify-content-center">
+        <span><a (click)='viewMore()' class="link">View more comment <i class="fa fa-caret-down" aria-hidden="true"></i></a></span>
+      </div>
+    </div>
+  </div>
+  
+</div>

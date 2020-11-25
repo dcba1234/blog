@@ -1,5 +1,5 @@
-$primary: #2FB5FA !default;
-$text: #34495E !default;
+$primary: #2fb5fa !default;
+$text: #34495e !default;
 .app-container {
   margin: 0;
   font-size: 14px;
@@ -69,4 +69,18 @@ $text: #34495E !default;
   .active {
     color: $primary;
   }
+}
+
+.avatar-info {
+  img {
+    height: 25px;
+    width: 25px;
+    object-fit: cover;
+    border-radius: 90px;
+  }
+}
+
+.menu-drop {
+  display: flex;
+  align-items: center;
 }

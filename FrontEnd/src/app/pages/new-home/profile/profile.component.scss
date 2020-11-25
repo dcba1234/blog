@@ -1,0 +1,24 @@
+.avatar {
+  position: relative;
+  img {
+    border: none;
+    object-fit: cover;
+  }
+  i {
+    position: absolute;
+    bottom: 70px;
+    right: -46px;
+    color: black;
+    z-index: 999;
+    cursor: pointer;
+  }
+  input {
+    position: absolute;
+    display: none;
+  }
+}
+
+.title {
+  margin-bottom: 5px;
+  color: #34b5b8 !important;
+}

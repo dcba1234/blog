@@ -1,7 +1,9 @@
+import { API } from 'app/services/constant.enum';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'app/services/authen.service';
+import { BaseService } from 'app/services/base-service.service';
 import { first } from 'rxjs/operators';
 @Component({
   selector: 'login',
@@ -16,6 +18,7 @@ export class LoginComponent implements OnInit {
   error = '';
   constructor(
       private formBuilder: FormBuilder,
+      private svc: BaseService,
       private route: ActivatedRoute,
       private router: Router,
       private authenticationService: AuthenticationService,
@@ -47,8 +50,11 @@ export class LoginComponent implements OnInit {
           .pipe(first())
           .subscribe(
               data => {
-                  this.authenticationService.saveToStorage(data.accessToken)
-                  this.router.navigate(['/news-home']);
+                  this.authenticationService.saveToStorage(data.accessToken);
+                  this.svc.makeGet((API.INFO)).subscribe((user) => {
+                    localStorage.setItem(`info`, JSON.stringify(user));
+                    this.router.navigate(['/news-home']);
+                  })
               },
               error => {
                   console.log(error);

@@ -15,6 +15,8 @@ export interface IUser extends ICommon{
   avatar?: string;
   role?: string;
   country?: ICountry;
+  countryId?: number;
   gender?: IGender;
+  genderId?: number;
   lastLogin?: string;
 }

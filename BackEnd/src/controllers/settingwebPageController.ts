@@ -16,6 +16,28 @@ class settingPageController {
       id: 'Url',
     },
     {
+      id: 'Category_Id',
+    },
+    {
+      id: 'Web_Id'
+    }
+  ]
+  colList: dbColunm[] = [
+    {
+      id: 'setting_page.Title',
+      title: 'title'
+    },
+    {
+      id: 'Url',
+    },
+    {
+      id: 'Category_Id',
+    },
+    {
+      id: 'Category.Title',
+      title: 'category'
+    },
+    {
       id: 'Web_Id'
     }
   ]
@@ -30,8 +52,9 @@ class settingPageController {
       id: 'Selector'
     }
   ]
-  colSave = ['Title', 'Url', 'Web_Id', 'Is_Active' , ...DEFAULT_COL]
+  colSave = ['Title', 'Url', 'Category_Id' ,'Web_Id', 'Is_Active' , ...DEFAULT_COL]
   defaultInfo = {columns: this.col, tablesName:this.tablesName};
+  defaultInfoList = {columns: this.colList, tablesName:this.tablesName};
   constructor() {
 
   }
@@ -93,8 +116,8 @@ class settingPageController {
       })
       dataSave.Modified = moment().format('YYYY-MM-DD hh:mm:ss');
       dataSave.Created = moment().format('YYYY-MM-DD hh:mm:ss');
-      dataSave.Created_By = getUser(req);
-      dataSave.Modified_By = getUser(req);
+      dataSave.Created_By = await getUser(req);
+      dataSave.Modified_By = await getUser(req);
       dataSave.Is_Active = true;
       if(id) {
         delete dataSave.Created;
@@ -135,8 +158,8 @@ class settingPageController {
         })
       }
       const q = ' where we'
-      const dt: [any, ISettingWeb[]] = await sqlHelper.getPage({...this.defaultInfo, 
-        additionQuery: ` where Web_Id = ? and ${this.tablesName}.Is_Active = true ORDER BY Created desc `}, limit, page, webId);
+      const dt: [any, ISettingWeb[]] = await sqlHelper.getPage({...this.defaultInfoList, additionTable: ' Category ',
+        additionQuery: ` where Web_Id = ? and ${this.tablesName}.Is_Active = true and Category.Id = ${this.tablesName}.Category_Id  ORDER BY Created desc `}, limit, page, webId);
       Promise.all(dt[1].map(async (i) => {
         i.modifiedBy = await sqlHelper.getUser(i.modifiedBy)[0];
         i.createdBy = await sqlHelper.getUser(i.modifiedBy)[0];

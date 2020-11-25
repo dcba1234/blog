@@ -11,13 +11,39 @@ export class BaseService {
   constructor(private http: HttpClient) { }
 
   makeGet(url, params?) {
+    const token = localStorage.getItem('token');
     const option = {
       params
+    }
+    if (token) {
+      option['headers'] = {
+        authtoken: token
+      };
     }
     return this.http.get<any>(API.BASE_URL + url, option);
   }
 
-  makePost(url, data, option?) {
+  makeUpload(url, data, option = {}) {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('file', data);
+    if (token) {
+      option['headers'] = {
+        authtoken: token
+      };
+      option['Content-Type'] = data.type
+    }
+    console.log(data)
+    return this.http.post(API.BASE_URL + url, formData, option);
+  }
+
+  makePost(url, data, option = {}) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      option['headers'] = {
+        authtoken: token
+      };
+    }
     return this.http.post(API.BASE_URL + url, data, option);
   }
 
