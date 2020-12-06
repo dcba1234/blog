@@ -25,4 +25,8 @@ export enum API {
   INFO = '/info',
   AVATAR = '/user/avatar',
   REASON = '/reason',
+  JOB = '/get-job',
+  JOB_TITLE = '/job',
+  JOB_START = '/start-job',
+  JOB_STOP = '/stop-job',
 };

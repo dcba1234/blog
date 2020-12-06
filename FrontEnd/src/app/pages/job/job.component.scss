@@ -1,0 +1,14 @@
+h3 {
+  margin: 0;
+}
+
+.card-height-fixed {
+  height: 300px;
+}
+
+.job-container {
+  .card-height-fixed>div {
+    height: 400px!important;
+    
+  }
+}

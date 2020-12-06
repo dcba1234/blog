@@ -14,7 +14,7 @@ class settingJobController {
       title: 'title'
     },
     {
-      id: 'Url',
+      id: 'Job_Url',
     },
     {
       id: 'Setting_Page_Id',
@@ -22,6 +22,10 @@ class settingJobController {
     {
       id: 'setting_page.Title',
       title: 'settingPage'
+    },
+    {
+      id: 'setting_web.Id',
+      title: 'settingWebId'
     },
     {
       id: 'Category_Id',
@@ -45,7 +49,7 @@ class settingJobController {
       id: 'Selector'
     }
   ]
-  colSave = ['Title', 'Setting_Page_Id' ,'Rule']
+  colSave = ['Title', 'Setting_Page_Id' , 'Job_Url','Rule']
   defaultInfo = {columns: this.col, tablesName:this.tablesName};
   constructor() {
 
@@ -72,15 +76,16 @@ class settingJobController {
 
   getPage() {
     return async (req, res) => { 
-      console.log('dfdf')
       let limit = req.query.size || 10;
       limit = 100;
       // page number
       const page = req.query.page || 1;
       // calculate offset
       const dt: [any, ISettingWeb[]] = await sqlHelper.getPage({...this.defaultInfo, removeDefaultColumn: true ,
-        additionTable: ' setting_page, category ',
-        additionQuery: `where setting_page.Id = ${this.tablesName}.Setting_Page_Id and setting_page.Category_Id = category.Id ORDER BY Title desc `}, limit, page);
+        additionTable: ' setting_page, category, setting_web ',
+        additionQuery: `where setting_page.Id = ${this.tablesName}.Setting_Page_Id 
+                  and setting_page.Web_Id = setting_web.Id
+                  and setting_page.Category_Id = category.Id ORDER BY Title desc `}, limit, page);
       const resDt:ResponseData = {
         page: 1,
         total: dt[0][0].total,

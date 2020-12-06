@@ -1,3 +1,4 @@
+import { JobComponent } from './../../pages/job/job.component';
 import { NotificationComponent } from './../../pages/notification/notification.component';
 import { CategoryComponent } from './../../pages/category/category.component';
 import { ReportComponent } from './../../pages/report/report.component';
@@ -23,6 +24,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: '',    redirectTo: 'home', pathMatch: 'full' },
     { path: 'home',      component: DashboardComponent },
     { path: 'web-setting',      component: WebSettingComponent },
+    { path: 'job',      component: JobComponent },
     { path: 'user',           component: UserComponent },
     { path: 'table',          component: TableComponent },
     { path: 'typography',     component: TypographyComponent },

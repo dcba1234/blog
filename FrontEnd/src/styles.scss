@@ -147,3 +147,18 @@ ng-select:focus {
   }
 }
 
+.status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.error {
+  background: #ff4d4f;
+}
+.success {
+  background: #52c41a;
+}

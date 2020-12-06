@@ -1,0 +1,135 @@
+<div class="setting-container job-container">
+  <form [formGroup]="form">
+  <div class="row ">
+    <!-- <div class="input-group no-border col-3">
+      <input type="text" value="" class="form-control" placeholder="Search...">
+      <div class="input-group-append">
+        <div class="input-group-text">
+          <i class="nc-icon nc-zoom-split"></i>
+        </div>
+      </div>
+    </div> -->
+    <div class="col-3">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text pr-2" id="inputGroupPrepend2"><i class="fa fa-search" aria-hidden="true"></i></span>
+        </div>
+        <input formControlName="key" type="text" class="form-control" id="validationDefaultUsername" placeholder="Enter key word . . ." aria-describedby="inputGroupPrepend2" required>
+      </div>
+    </div>
+    <div class="col-2 no-border">
+      <div class="input-group">
+        <button type="button" class="btn btn-info" (click)="openModal(template)"><i class="fa fa-plus" aria-hidden="true" ></i> Add project</button>
+
+      </div>
+    </div>
+  </div>
+</form>
+  <div class="row">
+    <div *ngFor="let item of this.dataSource.rows" class="col-6">
+      <card heightFixed="240px" class="card-height-fixed">
+        <div class="d-flex align-items-center">
+          <h3>{{item.title}}</h3>
+          <button (click)="goTo(item)" type="button" style="width: 100px;" class="btn ml-auto btn-info mb-2">{{ runningJobs[item.id.toString()]? 'Stop' : 'Start' }} </button>
+
+        </div>
+        <hr>
+        <div class="row mb-2">
+          <div class="col-4">
+            <p class="max-line-2" [title]="item.note">Category: {{item.category}}</p>
+          </div>
+          <div class="col-4">
+            <p class="max-line-2" [title]="item.note">Page: {{item.settingPage}}</p>
+          </div>
+          <div class="col-4">
+            Status: <div class="status" [class.success]="!!runningJobs[item.id.toString()]" 
+              [class.error]="!runningJobs[item.id.toString()]"></div> {{ runningJobs[item.id.toString()]? 'running' : 'stop' }}
+          </div>
+          <div class="col-12">
+            <p class="max-line-2" [title]="item.note">Rule: {{item.rule}}</p>
+          </div>
+          <div class="col-12">
+            <p class="max-line-2" [title]="item.note">Url: {{item.jobUrl}}</p>
+          </div>
+         
+        </div>
+      </card>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Create New Project</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formSave">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Title<span class="red"> *</span></label>
+        <input type="text" class="form-control" [class.is-invalid]="this.isError('title','')" formControlName="title" placeholder="">
+        <div class="invalid-feedback" >
+          This field is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Url<span class="red"> *</span></label>
+        <input type="text" class="form-control" [class.is-invalid]="this.isError('jobUrl','')" formControlName="jobUrl" placeholder="">
+        <div class="invalid-feedback" >
+          This field is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1"
+            >Website<span class="red"> *</span></label
+          >
+          <ng-select
+            [clearable]='false'
+            placeholder="select"
+            [items]="settingWeb"
+            bindLabel="title"
+            bindValue="id"
+            formControlName="website"
+            [class.is-invalid]="this.isError('website','')" 
+          >
+          </ng-select>
+          <div class="invalid-feedback" [class.show]="this.isError('website','')">
+            This field is required
+          </div>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1"
+            >Setting page<span class="red"> *</span></label
+          >
+          <ng-select
+            placeholder="select"
+            [items]="settings"
+            bindLabel="title"
+            bindValue="id"
+            formControlName="settingPageId"
+            [class.is-invalid]="this.isError('settingPageId','')" 
+          >
+          </ng-select>
+          <div class="invalid-feedback" [class.show]="this.isError('settingPageId','')">
+            This field is required
+          </div>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Rule<span class="red"> *</span></label>
+        <textarea class="form-control" [class.is-invalid]="this.isError('rule','')" formControlName="rule" id="exampleInputPassword1" placeholder=""></textarea>
+        <div class="invalid-feedback" >
+          This field is required
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button type="button" (click)="closeModal()" class="btn btn-secondary mr-2">Close</button>
+        <button type="submit" (click)="submit()" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<pre>{{jobData | json}}</pre>

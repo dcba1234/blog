@@ -11,6 +11,7 @@ export interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
     { path: '/admin/home',     title: 'home',         icon: 'nc-app',       class: '' },
     { path: '/admin/web-setting',     title: 'setting',         icon: 'nc-settings',       class: '' },
+    { path: '/admin/job',     title: 'job',         icon: 'nc-delivery-fast',       class: '' },
     { path: '/admin/articles',     title: 'Article',         icon: 'nc-paper',       class: '' },
     { path: '/admin/category',         title: 'Category',        icon: 'nc-tile-56',    class: '' },
     { path: '/admin/gender',         title: 'Gender',             icon: 'nc-align-left-2',    class: '' },

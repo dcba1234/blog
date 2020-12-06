@@ -47,7 +47,7 @@ class DashboardController {
       const dateDt = [];
       const dates = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       await Promise.all(dates.map( async (d, index) => {
-        let q = `SELECT COUNT(*) as count FROM post_interaction WHERE YEAR(post_interaction.Created) = '${moment().year()}' and MONTH(post_interaction.Created) = ${index+1}`;
+        let q = `SELECT COUNT(*) as count FROM post_interaction WHERE Is_Report <> 1 and YEAR(post_interaction.Created) = '${moment().year()}' and MONTH(post_interaction.Created) = ${index+1}`;
         let result = (await getDataFromQuery(q))[0].count;
         dateDt.push(result);
       }))

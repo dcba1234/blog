@@ -128,7 +128,7 @@ export class WebSettingDetailComponent implements OnInit {
       title: ['', Validators.required],
       avatar: ['', Validators.required],
       url: ['', Validators.required],
-      tag: ['', Validators.required],
+      tag: [[]],
       categoryId: ['', Validators.required],
       elements: this.fb.array([]),
       content: ['', Validators.required],
@@ -170,7 +170,7 @@ export class WebSettingDetailComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    const savedt = { ...this.form.value };
+    const savedt = { ...this.form.value, url: this.currentUrl };
     savedt.sourceId = parseInt(this.webId, 10);
     this.svc.makePost(API.POST, savedt).subscribe(() => {
       this.makeToast();

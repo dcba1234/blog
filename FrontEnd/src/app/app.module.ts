@@ -48,6 +48,7 @@ import { CommentComponent } from './pages/new-home/new-detail/comment/comment.co
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProfileComponent } from './pages/new-home/profile/profile.component';
+import { JobComponent } from './pages/job/job.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { ProfileComponent } from './pages/new-home/profile/profile.component';
     NewDetailComponent,
     CommentComponent,
     ProfileComponent,
+    JobComponent,
   ],
   imports: [
     BrowserAnimationsModule,
