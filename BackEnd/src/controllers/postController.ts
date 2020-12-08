@@ -194,7 +194,6 @@ class postController {
   getPage() {
     //additionQuery: ` where ${this.tablesName}.Is_Active = true ORDER BY Created desc `
     return async (req, res) => {
-      console.log(req.query);
       let key = "";
       if (req.query.key) {
         key = `( post.Title like ${db.escape(
@@ -270,8 +269,6 @@ class postController {
 
   save() {
     return async (req, res) => {
-      console.log("article save");
-
       let id = req.body.id;
       let dataSave: any = {};
       this.colSave.map((key) => {
@@ -283,7 +280,6 @@ class postController {
 
       //check url exist
       const check = await this.getByUrl(url);
-      console.log(check);
       if (check && check.length > 0) {
         res.send("this url is already exist");
         return;
@@ -300,7 +296,6 @@ class postController {
       dataSave.Source_Id = req.body.sourceId; //settingWebId
       dataSave.Slug =
         removeAccents(dataSave.Title) + "-" + new Date().getTime();
-      //console.log(dataSave);
       await sqlHelper.save(this.tablesName, _.omit(dataSave, ["Tag"]));
       await Promise.all(
         dataSave.Tag.map(async (tag) => {
@@ -326,7 +321,6 @@ class postController {
   deactive() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Slug = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id);
       res.json();
     };
@@ -347,14 +341,12 @@ class postController {
   active() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = true WHERE Slug = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id);
       res.json();
     };
   }
 
   saveTag(tag, isUpdate?) {
-    console.log(isUpdate);
 
     let q = `insert into tag SET ?`;
     if (isUpdate) {
@@ -380,9 +372,8 @@ class postController {
   testCronJob() {
     return async (req, res) => {
       var j = schedule.scheduleJob("1", "*/5 * * * * *", function () {
-        console.log("The answer to life, the universe, and everything!");
+       
       });
-      console.log("running");
 
       res.status(200).send();
     };
@@ -404,6 +395,8 @@ class postController {
         id: string;
         jobUrl: string;
         settingPageId: any;
+        categoryId: any;
+        settingWebId: any;
         rule: {
           maxLength: number;
           minLength: number;
@@ -416,20 +409,14 @@ class postController {
       }
       // get all url
       const html = await this.getContentByUrl(info.jobUrl);
-      //res.json(html)
-      // console.log($(`#${info.id} a`)
-      // .map(function () {
-      //   return $(this).prop("href");
-      // })
-      // .get(),'aaaaaaaaa')
       $(`#${info.id}`).remove();
+      $("body").append(`<div id="content"></div>`)
       $("body").prepend(`<div id='${info.id}'>${html}</div>`);
       let listA = $(`#${info.id} a`)
         .map(function () {
           return $(this).prop("href");
         })
         .get();
-        console.log($("body").html().length)
       if (!info.rule.maxLength) {
         info.rule.maxLength = 255;
       }
@@ -447,8 +434,8 @@ class postController {
       );
       let baseUrl = info.jobUrl.slice(0,info.jobUrl.lastIndexOf('/'))
       listA = listA.map((i) => baseUrl + i)
-      res.json(listA);
-      //console.log($('a'))
+     
+
       //listA = listA.filter((i) => i <= info.rule.maxLength && i.includes(info.rule.contain))
       // Promise.all(listA.map(async (url, index) => {
       //   const content = await this.getContentByUrl(info.jobUrl);
@@ -457,23 +444,45 @@ class postController {
 
       // }))
       //
+      listA = Array.from(new Set(listA));
+      res.json(listA);
       const elements = await getDataFromQuery(
         `select Selector as selector, Post_Property as postProperty from setting_element where Setting_Page_Id = ?`,
         info.settingPageId
       );
-      //console.log(elements);
-
+  
+      const _this = this
       var j = schedule.scheduleJob(
         info.id.toString(),
-        "*/5 * * * * *",
+        "*/35 * * * * *",
         function () {
           console.log(listA.length);
+         _this.clone(listA, elements, info, req)
         }
       );
       console.log("running");
 
       res.status(200).send();
     };
+  }
+
+
+  async clone(listA, elements, info, req) {
+    for(let i = 0; i < listA.length; i ++) {
+      $('#content').empty();
+      let content = await this.getContentByUrl(listA[i])
+      $('#content').append(content)
+      let dataSave = {};
+  
+      elements.map((e) => {
+        dataSave = {...dataSave, ...this.parseData(e)}
+      })
+
+      dataSave['sourceUrl'] = listA[i]
+      dataSave['sourceId'] = info.settingWebId
+      dataSave['categoryId'] = info.categoryId
+      await this.saveArticle(dataSave, req)
+    }
   }
 
   parseData(data) {
@@ -493,6 +502,37 @@ class postController {
     return dataSave;
   }
 
+  async saveArticle(data, req) {
+      let dataSave: any = {};
+      this.colSave.map((key) => {
+        if (data[toCamelCase(key)]) {
+          dataSave[key] = data[toCamelCase(key)];
+        }
+      });
+      const url = data["sourceUrl"];
+      //check url exist
+      const check = await this.getByUrl(url);
+      if (check && check.length > 0) {
+        return Promise.resolve('');
+      }
+      if(!data.title) {
+        return Promise.resolve('');
+      }
+      //
+      dataSave.Source_Url = url;
+      dataSave.Modified = moment().format("YYYY-MM-DD hh:mm:ss");
+      dataSave.Created = moment().format("YYYY-MM-DD hh:mm:ss");
+      dataSave.Created_By = await getUser(req);
+      dataSave.Modified_By = await getUser(req);
+      dataSave.Is_Active = true;
+      dataSave.Publish_Date = moment().format("YYYY-MM-DD hh:mm:ss");
+      dataSave.Read_Time = Math.floor(data.content.length / 20) + 1;
+      dataSave.Source_Id = data['sourceId']; //settingWebId
+      dataSave.Slug =
+        removeAccents(data.title) + "-" + new Date().getTime();
+      return sqlHelper.save(this.tablesName, _.omit(dataSave, ["Tag"]));
+  }
+
   getContentByUrl(url) {
     return new Promise((resolve, reject) => {
       var request = require("request");
@@ -504,7 +544,6 @@ class postController {
 
   test() {
     $("body").append(`<h3 class='abc'> tieesbt hành tét</h3>`);
-    console.log($(".abc").text());
   }
 
   getCronJob() {

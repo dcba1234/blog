@@ -2,7 +2,7 @@
   <span>
     {{item.title}}
   </span>
-  <a [routerLink]="'category/'+ item.id ">Xem thêm</a>
+  <a [routerLink]="'/home/all'" [queryParams]="{ category: item.id }">Xem thêm</a>
 </div>
 <div class="row" *ngIf="dataSource.length > 0">
   <div class="col-6">
