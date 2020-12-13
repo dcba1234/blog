@@ -29,7 +29,6 @@ export class HomeCategoryComponent implements OnInit {
 
   async loadData() {
     this.dataSource = await this.svc.makeGet(API.CATEGORY_ALL).toPromise();
-    console.log(this.dataSource);
 
   }
 

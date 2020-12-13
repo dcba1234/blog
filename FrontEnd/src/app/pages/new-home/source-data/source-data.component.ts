@@ -25,7 +25,6 @@ export class SourceDataComponent implements OnInit {
     private toastr: ToastrService,
     private dragulaService: DragulaService) {
       this.activeRoute.queryParams.subscribe(params => {
-      console.log(params);
       this.filterObject = params;
     });
     }
@@ -35,7 +34,6 @@ export class SourceDataComponent implements OnInit {
     }
     async loadData() {
       this.dataSource = await this.svc.makeGet(API.SETTING_WEB).toPromise();
-      console.log(this.dataSource);
     }
     goTo(item) {
       this.router.navigate(['/home/all'], { queryParams: { source: item.id } })

@@ -12,8 +12,6 @@ export class NotificationsComponent {
   constructor(private toastr: ToastrService) {}
   showNotification(from, align) {
     const color = Math.floor(Math.random() * 5 + 1);
-    console.log( 'toast-' + from + '-' + align);
-
     switch (color) {
       case 1:
         this.toastr.info(

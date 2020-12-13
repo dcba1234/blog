@@ -119,8 +119,6 @@ class DashboardController {
   delete() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Account = ?`;
-      console.log(q);
-      
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -129,7 +127,6 @@ class DashboardController {
   deactive() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Account = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -138,7 +135,6 @@ class DashboardController {
   active() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = true WHERE Account = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }

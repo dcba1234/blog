@@ -84,7 +84,6 @@ export class UserManagerComponent implements OnInit {
       key: ['']
     })
     this.form.valueChanges.subscribe((value) => {
-      console.log(value);
       this.loadData();
     })
   }

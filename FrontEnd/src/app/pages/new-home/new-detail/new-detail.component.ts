@@ -1,3 +1,4 @@
+import { AuthenticationService } from './../../../services/authen.service';
 import { Component, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,6 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 export class NewDetailComponent implements OnInit {
   dataSource;
   slug;
+  isLogin = false;
   modalRef: BsModalRef;
   formSave: FormGroup;
   config = {
@@ -25,13 +27,19 @@ export class NewDetailComponent implements OnInit {
     class: 'modal-s modal-dialog-centered'
   };
   reason = [];
+  similar = [];
   constructor(private svc: BaseService,
     private modalService: BsModalService,
     private fb: FormBuilder,
     private router: Router,
     private activeRoute: ActivatedRoute,
     private toastr: ToastrService,
-    private dragulaService: DragulaService) { }
+    private auth: AuthenticationService,
+    private dragulaService: DragulaService) {
+      if (auth.getToken()) {
+        this.isLogin = true;
+      }
+    }
 
     ngOnInit(): void {
       this.buildForm();
@@ -43,10 +51,12 @@ export class NewDetailComponent implements OnInit {
     async loadData(slug) {
       // tslint:disable-next-line:max-line-length
       this.dataSource = await this.svc.makeGet(`${API.POST}/${slug}`).toPromise();
+      this.svc.getSimilar(this.dataSource.summary).subscribe((d) => {
+        this.similar = d;
+      })
       this.svc.makeGet(`${API.REASON}`).subscribe((r) => {
         this.reason = r.rows;
       })
-      console.log(this.dataSource);
     }
 
     getDate(date) {

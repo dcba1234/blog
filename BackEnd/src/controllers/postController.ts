@@ -456,12 +456,9 @@ class postController {
         info.id.toString(),
         "*/35 * * * * *",
         function () {
-          console.log(listA.length);
          _this.clone(listA, elements, info, req)
         }
       );
-      console.log("running");
-
       res.status(200).send();
     };
   }

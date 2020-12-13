@@ -26,6 +26,11 @@ export class AuthenticationService {
 
   getInfo(): IUser {
     const info = JSON.parse(localStorage.getItem('info'));
+    if (!info) {
+      this.userInfo.next({ name: ''});
+      this.avatarInfo.next('');
+      return null
+    }
     this.userInfo.next({ name: info.firstName + ' ' + info.lastName});
     this.avatarInfo.next(info.avatar);
     return JSON.parse(localStorage.getItem('info'));

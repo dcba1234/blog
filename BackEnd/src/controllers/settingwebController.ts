@@ -64,7 +64,6 @@ class settingwebController {
       // page number
       const page = req.query.page || 1;
       // calculate offset
-      console.log('limit',limit);
       
       const dt: [any, ISettingWeb[]] = await sqlHelper.getPage(
         {...this.defaultInfo,  filterQuery: key? key : undefined,}

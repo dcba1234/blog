@@ -67,7 +67,6 @@ export class ReportDetailComponent implements OnInit, OnChanges {
     private activeRoute: ActivatedRoute,
     private toastr: ToastrService) { }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.slug);
     this.loadData(this.slug)
   }
 

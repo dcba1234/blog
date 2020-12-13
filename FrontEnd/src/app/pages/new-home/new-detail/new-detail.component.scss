@@ -6,7 +6,7 @@
   overflow: hidden;
   .align-center {
     text-align: center;
-  } 
+  }
   .image {
     text-align: center;
   }
@@ -25,9 +25,24 @@
 .like {
   height: 30px;
   cursor: pointer;
-
 }
 
 .video {
   width: 100%;
+}
+
+.similar-list-title {
+  border-left: 2px solid #2fb5fa;
+  h4 {
+    margin-left: 4px;
+  }
+
+}
+
+.similar-item {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #E5E5E5;
+  .marg {
+    margin-bottom: 10px;
+  }
 }

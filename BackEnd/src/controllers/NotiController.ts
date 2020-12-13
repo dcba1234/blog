@@ -102,7 +102,6 @@ class NotificationController {
   delete() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`;
-      console.log(q);
       
       await getDataFromQuery(q, req.params.id)
       res.json();
@@ -112,7 +111,6 @@ class NotificationController {
   deactive() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -121,7 +119,6 @@ class NotificationController {
   active() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = true WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }

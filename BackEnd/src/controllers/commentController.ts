@@ -135,9 +135,7 @@ class commentController {
 
     //additionQuery: ` where ${this.tablesName}.Is_Active = true ORDER BY Created desc `
     return async (req, res) => { 
-      
       const account = await getUser(req)
-      console.log(account);
       let key = ` Post_Slug = ${db.escape(req.params.slug)} and Parent_Id is NULL `;
       const limit = req.query.size || 10;
       // page number
@@ -181,7 +179,6 @@ class commentController {
       dataSave.Is_Active = true;
       dataSave.Account = dataSave.Created_By;
 
-      //console.log(dataSave);
       await sqlHelper.save(this.tablesName, _.omit(dataSave, ['Tag']));
       await Promise.all(dataSave.Tag.map(async (tag) => {
         const tagCount = await sqlHelper.getTotalWithQuery({ tablesName: 'tag' , columns: [], additionQuery: ' where Tag = ?'}, tag)

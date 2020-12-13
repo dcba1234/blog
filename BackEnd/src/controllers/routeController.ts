@@ -9,9 +9,7 @@ class routeController {
   }
 
   get() {
-    console.log(this.test)
     return (req, res) => { 
-      console.log(this)
       res.json({name: 'thành'})
     }
   }

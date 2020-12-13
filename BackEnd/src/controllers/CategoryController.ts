@@ -89,9 +89,7 @@ class CategoryController {
 
   delete() {
     return async (req, res) => {
-      const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`;
-      console.log(q);
-      
+      const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`; 
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -100,7 +98,6 @@ class CategoryController {
   deactive() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -109,7 +106,6 @@ class CategoryController {
   active() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = true WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }

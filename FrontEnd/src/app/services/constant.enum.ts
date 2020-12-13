@@ -29,4 +29,5 @@ export enum API {
   JOB_TITLE = '/job',
   JOB_START = '/start-job',
   JOB_STOP = '/stop-job',
+  PYTHON = 'http://localhost:5000/get-similar'
 };

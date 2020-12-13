@@ -50,7 +50,6 @@ export class JobComponent implements OnInit {
      })
      this.svc.makeGet(`${API.JOB}`).subscribe((data: any) => {
       this.runningJobs = data;
-      console.log(data)
      })
   }
 

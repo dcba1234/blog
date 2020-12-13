@@ -23,6 +23,10 @@ export class BaseService {
     return this.http.get<any>(API.BASE_URL + url, option);
   }
 
+  getSimilar(summary) {
+    return this.http.get<any>(API.PYTHON + `?q=` + summary);
+  }
+
   makeUpload(url, data, option = {}) {
     const token = localStorage.getItem('token');
     const formData = new FormData();
@@ -33,7 +37,6 @@ export class BaseService {
       };
       option['Content-Type'] = data.type
     }
-    console.log(data)
     return this.http.post(API.BASE_URL + url, formData, option);
   }
 

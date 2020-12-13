@@ -99,7 +99,6 @@ class settingJobController {
   delete() {
     return async (req, res) => {
       const q = `Delete from ${this.tablesName} WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -107,7 +106,6 @@ class settingJobController {
 
   async deleteElement(id) {
       const q = `Delete from setting_element WHERE Setting_Page_Id = ?`;
-      console.log(q);
       
       await getDataFromQuery(q, id);
   }

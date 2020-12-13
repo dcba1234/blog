@@ -25,8 +25,8 @@ export class SourceListComponent implements OnInit {
     private toastr: ToastrService,
     private dragulaService: DragulaService) {
       this.activeRoute.queryParams.subscribe(params => {
-      console.log(params);
       this.filterObject = params;
+      this.loadData();
     });
     }
 
@@ -37,7 +37,6 @@ export class SourceListComponent implements OnInit {
   async loadData() {
     // tslint:disable-next-line:max-line-length
     this.dataSource = await this.svc.makeGet(API.POST, { ...this.filterObject, active: 'true', page: this.page , orderBy: 'Created Desc', size: 5}).toPromise();
-    console.log(this.dataSource);
 
   }
 

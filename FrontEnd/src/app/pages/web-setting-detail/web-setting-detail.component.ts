@@ -115,7 +115,6 @@ export class WebSettingDetailComponent implements OnInit {
 
   loadWebData(data) {
     this.svc.makePost(`${API.DATA}`, data).subscribe((d: any) => {
-      console.log(d);
       this.htmlData = d.data;
       this.isDone = true;
       this.currentUrl = data.url;

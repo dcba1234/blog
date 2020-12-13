@@ -17,7 +17,6 @@ export class PermissionGuard implements CanActivate {
 
     const token = localStorage.getItem('token');
     const tokenRs: any = jwt_decode(token);
-    console.log(tokenRs);
     if (tokenRs.data.role === 'ADMIN') {
       return true;
     } else {

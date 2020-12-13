@@ -44,7 +44,6 @@ export class CommentComponent implements OnInit {
     this.page ++;
     this.svc.makeGet(API.COMMENT + `/${this.slug}`, { page: this.page, size: 5 }).subscribe((data) => {
       this.comments.rows.push(...data.rows);
-      console.log(data.rows);
       if ( 5 * this.page >= data.total) {
         this.isDone = true;
       }

@@ -28,7 +28,6 @@ export class HomePageComponent implements OnInit {
 
   async loadData() {
     this.category = await this.svc.makeGet(API.CATEGORY_ALL).toPromise();
-    console.log(this.category);
 
   }
 

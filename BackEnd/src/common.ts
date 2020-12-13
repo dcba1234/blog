@@ -78,7 +78,6 @@ class SqlHelper {
         q += info.orderQuery;
       }
       q += " limit " + limit + " OFFSET " + offset;
-      // console.log(q)
     return Promise.all([this.getTotal(info, data), getDataFromQuery(q, data)])
   }
 
@@ -197,7 +196,6 @@ class SqlHelper {
 export const getDataFromQuery: any = async (query: string, data?, Id?) =>
   new Promise((resolve, reject) => {
     let sql = query;
-    //console.log(sql)
     db.query(sql, [data, Id], (err, response) => {
       if (err) {
         throw err;

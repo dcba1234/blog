@@ -73,7 +73,6 @@ export class CategoryComponent implements OnInit {
       title: ['', Validators.required],
     })
     this.form.valueChanges.subscribe((value) => {
-      console.log(value);
       this.loadData();
     })
   }

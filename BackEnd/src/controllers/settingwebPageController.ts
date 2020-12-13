@@ -79,8 +79,6 @@ class settingPageController {
   getById() {
     return async (req, res) => { 
       const webId = req.params.id;
-      console.log(webId);
-      
       const dt: [any, ISettingWeb[]] = 
                           await sqlHelper.getPer({columns: this.col, tablesName:this.tablesName,
                          additionQuery:` where ${this.tablesName}.Id = ? and ${this.tablesName}.Is_Active`}, webId);
@@ -177,7 +175,6 @@ class settingPageController {
   delete() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -185,8 +182,6 @@ class settingPageController {
 
   async deleteElement(id) {
       const q = `Delete from setting_element WHERE Setting_Page_Id = ?`;
-      console.log(q);
-      
       await getDataFromQuery(q, id);
   }
 

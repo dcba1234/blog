@@ -15,7 +15,6 @@ export class NewAreaComponent implements OnInit {
   constructor(private svc: BaseService) { }
 
   ngOnInit(): void {
-    console.log(this.item);
     this.loadData();
   }
 

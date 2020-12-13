@@ -36,7 +36,6 @@ export class ProfileComponent implements OnInit {
       this.router.navigate(['/login']);
     }
     this.svc.makeGet(API.INFO).subscribe((item) => {
-      console.log(item)
       this.dataSource = item;
       if (this.dataSource.avatar.indexOf('http') < 0) {
         this.dataSource.avatar = API.BASE_URL + '/' + this.dataSource.avatar

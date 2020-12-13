@@ -222,7 +222,6 @@ class UserController {
         res.status(401);
         return
       }
-      console.log(decoded.data.account);
       
       const q = `UPDATE ${this.tablesName} SET Avatar = ? WHERE Account = ?`;
       await getDataFromQuery(q, path, decoded.data.account)
@@ -238,9 +237,7 @@ class UserController {
 
   register() {
     return async (req, res) => {
-      console.log(req.user);
       const acc = await this.authentication(req.body.user.account);
-      console.log(acc, "heloooooooooooooooooooooo");
 
       if (acc.length > 0) {
         res.status(403).send("That account has been taken. Try another.");
@@ -256,7 +253,6 @@ class UserController {
       dataSave.Modified_By = await getUser(req);
       dataSave.Is_Active = true;
       dataSave.role = "user";
-      console.log(dataSave, "dataaaaaaaaa");
 
       const rs = await sqlHelper.save(this.tablesName, dataSave);
       this.login()(req, res);

@@ -82,7 +82,6 @@ export class ReportComponent implements OnInit {
       title: ['', Validators.required],
     })
     this.form.valueChanges.subscribe((value) => {
-      console.log(value);
       this.loadData();
     })
   }

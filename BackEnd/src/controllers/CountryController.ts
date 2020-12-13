@@ -90,7 +90,6 @@ class CountryController {
   delete() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`;
-      console.log(q);
       
       await getDataFromQuery(q, req.params.id)
       res.json();
@@ -100,7 +99,6 @@ class CountryController {
   deactive() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }
@@ -109,7 +107,6 @@ class CountryController {
   active() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = true WHERE Id = ?`;
-      console.log(q);
       await getDataFromQuery(q, req.params.id)
       res.json();
     }

@@ -32,7 +32,6 @@ export class NewHomeComponent implements OnInit {
 
   initData() {
     const userInfo = this.authen.getInfo();
-    console.log(userInfo);
     if (userInfo) {
       this.user = userInfo;
       if (this.user.avatar.indexOf('http') < 0) {
@@ -42,6 +41,7 @@ export class NewHomeComponent implements OnInit {
   }
 
   onEnter() {
+    this.router.navigate(['/home/all'])
     this.router.navigate(['/home/all'], { queryParams: { key: this.key } })
   }
 

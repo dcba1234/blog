@@ -1,4 +1,4 @@
-<div *ngIf="this.dataSource">
+<div *ngIf="this.dataSource" class="mb-3">
   <div class="row">
     <div class="col-9">
       <h3>
@@ -16,23 +16,24 @@
     
       </div>
     </div>
-    <div class="col-3">
-      <!-- <div class="new-info">
-        <p>
-          by {{this.dataSource.source}}
-        </p>
-        <div class="like">
-
-          <i class="like fa-2x fa fa-thumbs-up" aria-hidden="true"></i> {{this.dataSource.like}}
-        </div>
-      </div> -->
+    <div class="col-3 similar-list">
+      <div class="similar-list-title">
+        <h4>Có thể bạn quan tâm</h4>
+      </div>
+      <div *ngFor="let item of this.similar" class="similar-item">
+        <a [routerLink]="'/home/detail/' + item.Slug"> {{item.Title}}</a>
+        <div class="marg"></div>
+      </div>
     </div>
   </div>
-  <button (click)="openModal(template)" class="btn btn-primary"><i class="fa fa-flag" aria-hidden="true"></i> Report</button>
+  <div class="mb-3">
+    Source: <a [href]="dataSource?.sourceUrl">{{dataSource?.sourceUrl}}</a>
+  </div>
+  <button *ngIf="isLogin" (click)="openModal(template)" class="btn btn-primary"><i class="fa fa-flag" aria-hidden="true"></i> Report</button>
 </div>
 
 <ng-container *ngIf="this.dataSource">
-  <comment [slug]="slug"></comment>
+  <comment *ngIf="isLogin" [slug]="slug"></comment>
 </ng-container>
 
 

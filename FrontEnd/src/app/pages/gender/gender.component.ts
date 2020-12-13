@@ -73,7 +73,6 @@ export class GenderComponent implements OnInit {
       title: ['', Validators.required],
     })
     this.form.valueChanges.subscribe((value) => {
-      console.log(value);
       this.loadData();
     })
   }
