@@ -33,8 +33,9 @@ export class WebPageComponent implements OnInit {
   modalRef: BsModalRef;
   confirmRef: BsModalRef;
   currentId;
-  cols = ['Id', 'Title', 'Url', 'Created', ''];
+  cols = ['Id', 'Title', 'Category', 'Url', 'Created', ''];
   form: FormGroup;
+  categorys = []
   constructor(
     private svc: BaseService,
     private modalService: BsModalService,
@@ -59,6 +60,9 @@ export class WebPageComponent implements OnInit {
         this.currentPage = 1;
       })
    })
+   this.svc.makeGet(`${API.CATEGORY_ALL}`).subscribe((data: any) => {
+    this.categorys = data;
+  })
   }
 
   pageChange(page) {
@@ -72,7 +76,8 @@ export class WebPageComponent implements OnInit {
   buildForm() {
     this.form = this.fb.group({
       title: ['', Validators.required],
-      url: ['', Validators.required]
+      url: ['', Validators.required],
+      categoryId:  [null, Validators.required]
     })
   }
 

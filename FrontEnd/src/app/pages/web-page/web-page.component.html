@@ -22,14 +22,15 @@
   <table class="table table-bordered web-page-table mt-3">
     <thead>
       <tr>
-        <th *ngFor="let col of cols">{{col}}</th>
+        <th [class]="'col-' + col" *ngFor="let col of cols">{{col}}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of dataSource.rows">
         <th scope="row">{{item.id}}</th>
         <td>{{item.title}}</td>
-        <td>
+        <td>{{item.category}}</td>
+        <td class="td-url-container">
           <div class="url-container">
             <a target="_blank" class="url" [href]="item.url">
               {{item.url}}
@@ -73,6 +74,23 @@
         <label for="exampleInputEmail1">Title<span class="red"> *</span></label>
         <input type="text" class="form-control" [class.is-invalid]="this.isError('title','')" formControlName="title" placeholder="">
         <div class="invalid-feedback" >
+          This field is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1"
+          >Category<span class="red"> *</span></label
+        >
+        <ng-select
+          placeholder="select"
+          [items]="categorys"
+          bindLabel="title"
+          bindValue="id"
+          formControlName="categoryId"
+          [class.is-invalid]="this.isError('categoryId','')" 
+        >
+        </ng-select>
+        <div class="invalid-feedback" [class.show]="this.isError('categoryId','')">
           This field is required
         </div>
       </div>

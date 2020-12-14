@@ -9,7 +9,7 @@
 }
 
 .url-container {
-  max-width: 80%;
+  max-width: 60%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -25,4 +25,12 @@
 
 .iframe {
   
+}
+
+.col-Url {
+  max-width: 60%;
+}
+
+.td-url-container {
+  max-width: 300px;
 }

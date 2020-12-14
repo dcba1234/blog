@@ -8,7 +8,8 @@ class settingwebController {
   tablesName = 'setting_web'
   col: dbColunm[] = [
     {
-      id: 'Title',
+      id: 'setting_web.Title',
+      title: `title`
     },
     {
       id: 'Url',
@@ -16,9 +17,7 @@ class settingwebController {
     {
       id: 'Note',
     },
-    {
-      id: 'Select_Mode',
-    },
+
   ]
   defaultInfo = {columns: this.col, tablesName:this.tablesName};
   colSave = ['Title','Url', 'Note' ,  'Is_Active' , ...DEFAULT_COL]
@@ -66,7 +65,7 @@ class settingwebController {
       // calculate offset
       
       const dt: [any, ISettingWeb[]] = await sqlHelper.getPage(
-        {...this.defaultInfo,  filterQuery: key? key : undefined,}
+        {...this.defaultInfo,  filterQuery: key? key : undefined, additionTable:` category `}
         , limit, page);
       Promise.all(dt[1].map(async (i) => {
         i.modifiedBy = await sqlHelper.getUser(i.modifiedBy)[0];

@@ -69,7 +69,8 @@ export class WebSettingDetailComponent implements OnInit {
     this.svc.makeGet(`${API.SETTING_PAGE_DETAIL}/${this.currentId}`).subscribe((data: any) => {
       this.dataSource = data;
       this.form.patchValue({
-        url: data.url
+        url: data.url,
+        categoryId: data.categoryId
       });
       this.currentUrl = data.url;
       this.webId = data.webId;

@@ -187,6 +187,7 @@ class SqlHelper {
      if(password) {
       q += ` and Password = ? `
      }
+     
     return getDataFromQuery(q, account, password);
   }
 }
@@ -195,6 +196,7 @@ class SqlHelper {
 
 export const getDataFromQuery: any = async (query: string, data?, Id?) =>
   new Promise((resolve, reject) => {
+    console.log(query)
     let sql = query;
     db.query(sql, [data, Id], (err, response) => {
       if (err) {
@@ -252,6 +254,7 @@ export function revertCamelCase(s: string) {
 }
 
 export function removeAccents(str) {
+  str = str.replace(/[^a-zA-Z ]/g, "")
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s\s+/g, ' ').replace(/\s/g, '-');
 }
 

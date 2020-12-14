@@ -134,10 +134,10 @@ class postController {
         })
       );
       dt[0].modifiedBy = (await sqlHelper.getUser(dt[0].modifiedBy))[0];
-      dt[0].like = (await this.getLike(slug))[0].count;
+      // dt[0].like = (await this.getLike(slug))[0].count;
       dt[0].createdBy = (await sqlHelper.getUser(dt[0].modifiedBy))[0];
       const resDt: any = dt[1][0];
-      resDt.like = (await this.getLike(slug))[0].count;
+      // resDt.like = (await this.getLike(slug))[0].count;
       //resDt.comment = (await this.getCommentBySlug(slug));
       res.json(resDt);
     };
@@ -317,7 +317,6 @@ class postController {
     };
   }
 
-
   deactive() {
     return async (req, res) => {
       const q = `UPDATE ${this.tablesName} SET Is_Active = false WHERE Slug = ?`;
@@ -330,8 +329,6 @@ class postController {
     const q = `select * from Post where Source_Url = ?`;
     return getDataFromQuery(q, url);
   }
-
-  
 
   getTagBySlug(slug) {
     const q = `select Tag from post_tag where Post_Slug = ?`;
@@ -347,7 +344,6 @@ class postController {
   }
 
   saveTag(tag, isUpdate?) {
-
     let q = `insert into tag SET ?`;
     if (isUpdate) {
       q = `UPDATE tag SET Post_Count = Post_Count + 1 where tag = ?`;
@@ -371,9 +367,7 @@ class postController {
 
   testCronJob() {
     return async (req, res) => {
-      var j = schedule.scheduleJob("1", "*/5 * * * * *", function () {
-       
-      });
+      var j = schedule.scheduleJob("1", "*/5 * * * * *", function () {});
 
       res.status(200).send();
     };
@@ -382,11 +376,10 @@ class postController {
   async savePostByUrl(url, data) {
     //get dt by url
     const html = await this.getContentByUrl(url);
-    
+
     //
     let dataSave: any = {};
   }
-
 
   runJob() {
     return async (req, res) => {
@@ -407,78 +400,70 @@ class postController {
         res.status(200).send();
         return;
       }
-      // get all url
-      const html = await this.getContentByUrl(info.jobUrl);
-      $(`#${info.id}`).remove();
-      $("body").append(`<div id="content"></div>`)
-      $("body").prepend(`<div id='${info.id}'>${html}</div>`);
-      let listA = $(`#${info.id} a`)
-        .map(function () {
-          return $(this).prop("href");
-        })
-        .get();
-      if (!info.rule.maxLength) {
-        info.rule.maxLength = 255;
-      }
-      if (!info.rule.contain) {
-        info.rule.contain = '';
-      }
-     
-      listA = listA.filter(
-        (i) =>
-          i.length >= 
-          ( info.rule.minLength || info.rule.contain.length + 5) &&
-          i.includes("/") &&
-          i[0] == "/" &&
-          i.includes(info.rule.contain)
-      );
-      let baseUrl = info.jobUrl.slice(0,info.jobUrl.lastIndexOf('/'))
-      listA = listA.map((i) => baseUrl + i)
-     
-
-      //listA = listA.filter((i) => i <= info.rule.maxLength && i.includes(info.rule.contain))
-      // Promise.all(listA.map(async (url, index) => {
-      //   const content = await this.getContentByUrl(info.jobUrl);
-      //   $('body').append(`<div class='item-${index}'></div>`);
-      //   $(`item-${index}`).append(content);
-
-      // }))
-      //
-      listA = Array.from(new Set(listA));
-      res.json(listA);
-      const elements = await getDataFromQuery(
-        `select Selector as selector, Post_Property as postProperty from setting_element where Setting_Page_Id = ?`,
-        info.settingPageId
-      );
-  
-      const _this = this
+      const _this = this;
       var j = schedule.scheduleJob(
         info.id.toString(),
-        "*/35 * * * * *",
-        function () {
-         _this.clone(listA, elements, info, req)
+        "*/15 * * * * *",
+        async function () {
+          // get all url
+          console.log(`hello`)
+          const html = await _this.getContentByUrl(info.jobUrl);
+          // console.log(html)
+          await $(`#${info.id}`).remove();
+          await $("body").append(`<div id="content"></div>`);
+          await $("body").prepend(`<div id='${info.id}'>${html}</div>`);
+          let listA = $(`#${info.id} a`)
+            .map(function () {
+              return $(this).prop("href");
+            })
+            .get();
+            console.log(listA)
+          if (!info.rule.maxLength) {
+            info.rule.maxLength = 255;
+          }
+          if (!info.rule.contain) {
+            info.rule.contain = "";
+          }
+          console.log(listA)
+          listA = listA.filter(
+            (i) =>
+              i.length >=
+                (info.rule.minLength || info.rule.contain.length + 5) &&
+              i.includes("/") &&
+              i[0] == "/" &&
+              i.includes(info.rule.contain)
+          );
+          let baseUrl = info.jobUrl.slice(0, info.jobUrl.lastIndexOf("/"));
+          listA = listA.map((i) => baseUrl + i);
+          listA = Array.from(new Set(listA));
+          // res.json(listA);
+          console.log(listA)
+          const elements = await getDataFromQuery(
+            `select Selector as selector, Post_Property as postProperty from setting_element where Setting_Page_Id = ?`,
+            info.settingPageId
+          );
+          _this.clone(listA, elements, info, req);
         }
       );
       res.status(200).send();
     };
   }
 
-
   async clone(listA, elements, info, req) {
-    for(let i = 0; i < listA.length; i ++) {
-      $('#content').empty();
-      let content = await this.getContentByUrl(listA[i])
-      $('#content').append(content)
+    for (let i = 0; i < listA.length; i++) {
+      $("#content").empty();
+      let content = await this.getContentByUrl(listA[i]);
+      $("#content").append(content);
       let dataSave = {};
-  
-      elements.map((e) => {
-        dataSave = {...dataSave, ...this.parseData(e)}
-      })
 
-      dataSave['sourceUrl'] = listA[i]
-      dataSave['sourceId'] = info.settingWebId
-      dataSave['categoryId'] = info.categoryId
-      await this.saveArticle(dataSave, req)
+      elements.map((e) => {
+        dataSave = { ...dataSave, ...this.parseData(e) };
+      });
+
+      dataSave["sourceUrl"] = listA[i];
+      dataSave["sourceId"] = info.settingWebId;
+      dataSave["categoryId"] = info.categoryId;
+      await this.saveArticle(dataSave, req);
     }
   }
 
@@ -491,7 +476,7 @@ class postController {
     dataSave[data.postProperty] = dataSave[data.postProperty] || "";
     dataSave[data.postProperty] = dataSave[data.postProperty].trim();
     if (data.postProperty === "avatar") {
-      dataSave[data.postProperty] = $(data.selector)[0].src;
+      dataSave[data.postProperty] = _.get($(data.selector)[0], 'src', '');
     }
     if (!dataSave[data.postProperty]) {
       return;
@@ -500,34 +485,36 @@ class postController {
   }
 
   async saveArticle(data, req) {
-      let dataSave: any = {};
-      this.colSave.map((key) => {
-        if (data[toCamelCase(key)]) {
-          dataSave[key] = data[toCamelCase(key)];
-        }
-      });
-      const url = data["sourceUrl"];
-      //check url exist
-      const check = await this.getByUrl(url);
-      if (check && check.length > 0) {
-        return Promise.resolve('');
+    if(!data.avatar) {
+      return Promise.resolve("");
+    }
+    let dataSave: any = {};
+    this.colSave.map((key) => {
+      if (data[toCamelCase(key)]) {
+        dataSave[key] = data[toCamelCase(key)];
       }
-      if(!data.title) {
-        return Promise.resolve('');
-      }
-      //
-      dataSave.Source_Url = url;
-      dataSave.Modified = moment().format("YYYY-MM-DD hh:mm:ss");
-      dataSave.Created = moment().format("YYYY-MM-DD hh:mm:ss");
-      dataSave.Created_By = await getUser(req);
-      dataSave.Modified_By = await getUser(req);
-      dataSave.Is_Active = true;
-      dataSave.Publish_Date = moment().format("YYYY-MM-DD hh:mm:ss");
-      dataSave.Read_Time = Math.floor(data.content.length / 20) + 1;
-      dataSave.Source_Id = data['sourceId']; //settingWebId
-      dataSave.Slug =
-        removeAccents(data.title) + "-" + new Date().getTime();
-      return sqlHelper.save(this.tablesName, _.omit(dataSave, ["Tag"]));
+    });
+    const url = data["sourceUrl"];
+    //check url exist
+    const check = await this.getByUrl(url);
+    if (check && check.length > 0) {
+      return Promise.resolve("");
+    }
+    if (!data.title) {
+      return Promise.resolve("");
+    }
+    //
+    dataSave.Source_Url = url;
+    dataSave.Modified = moment().format("YYYY-MM-DD hh:mm:ss");
+    dataSave.Created = moment().format("YYYY-MM-DD hh:mm:ss");
+    dataSave.Created_By = await getUser(req);
+    dataSave.Modified_By = await getUser(req);
+    dataSave.Is_Active = true;
+    dataSave.Publish_Date = moment().format("YYYY-MM-DD hh:mm:ss");
+    dataSave.Read_Time = Math.floor(data.content.length / 20) + 1;
+    dataSave.Source_Id = data["sourceId"]; //settingWebId
+    dataSave.Slug = removeAccents(data.title) + "-" + new Date().getTime();
+    return sqlHelper.save(this.tablesName, _.omit(dataSave, ["Tag"]));
   }
 
   getContentByUrl(url) {
