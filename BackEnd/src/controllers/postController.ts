@@ -403,12 +403,10 @@ class postController {
       const _this = this;
       var j = schedule.scheduleJob(
         info.id.toString(),
-        "*/15 * * * * *",
+        "*/180 * * * *",
         async function () {
           // get all url
-          console.log(`hello`)
           const html = await _this.getContentByUrl(info.jobUrl);
-          // console.log(html)
           await $(`#${info.id}`).remove();
           await $("body").append(`<div id="content"></div>`);
           await $("body").prepend(`<div id='${info.id}'>${html}</div>`);
@@ -417,14 +415,12 @@ class postController {
               return $(this).prop("href");
             })
             .get();
-            console.log(listA)
           if (!info.rule.maxLength) {
             info.rule.maxLength = 255;
           }
           if (!info.rule.contain) {
             info.rule.contain = "";
           }
-          console.log(listA)
           listA = listA.filter(
             (i) =>
               i.length >=
@@ -437,7 +433,6 @@ class postController {
           listA = listA.map((i) => baseUrl + i);
           listA = Array.from(new Set(listA));
           // res.json(listA);
-          console.log(listA)
           const elements = await getDataFromQuery(
             `select Selector as selector, Post_Property as postProperty from setting_element where Setting_Page_Id = ?`,
             info.settingPageId

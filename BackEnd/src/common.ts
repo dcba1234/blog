@@ -196,7 +196,6 @@ class SqlHelper {
 
 export const getDataFromQuery: any = async (query: string, data?, Id?) =>
   new Promise((resolve, reject) => {
-    console.log(query)
     let sql = query;
     db.query(sql, [data, Id], (err, response) => {
       if (err) {
