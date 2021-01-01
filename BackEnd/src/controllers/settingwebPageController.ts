@@ -103,12 +103,26 @@ class settingPageController {
     }
   }
 
+  getHtmlByUrl() {
+    return async (req, res) => {
+      var request = require("request");
+      console.log(req.query.url)
+      request(
+        { uri: req.query.url },
+        function(error, response, body) {
+          console.log(body.toString())
+          res.send(body.toString())
+        }
+      );
+    }
+  }
+
   save() {
     return async (req, res) => { 
       let id = req.body.id;
       let dataSave: any = {}
       this.colSave.map((key) => {
-        if(req.body[toCamelCase(key)]) {
+        if(req.body[toCamelCase(key)]) {req.query
           dataSave[key] = req.body[toCamelCase(key)];
         }   
       })

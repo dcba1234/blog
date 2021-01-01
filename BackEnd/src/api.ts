@@ -28,6 +28,8 @@ export const initAPIs = (app) => {
     router.delete("/setting-web/delete/:id", settingPage.delete());
     router.get("/setting-page/:id", settingPage.getById());
     router.post("/data", settingPage.getDataByUrl());
+    router.get("/get-by-url", settingPage.getHtmlByUrl());
+
     router.get("/category/all", category.getAll());
     router.get("/category", category.getPage());
     router.post("/category/save", category.save());

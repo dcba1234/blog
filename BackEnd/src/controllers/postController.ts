@@ -17,6 +17,9 @@ const { JSDOM } = require("jsdom");
 const { window } = new JSDOM("");
 const $ = require("jquery")(window);
 var schedule = require("node-schedule");
+const rp = require("request-promise");
+const cheerio = require("cheerio");
+const fs = require("fs");
 class postController {
   tablesName = "post";
   col: dbColunm[] = [
@@ -397,24 +400,64 @@ class postController {
         };
       } = req.body;
       if (schedule.scheduledJobs[info.id.toString()]) {
-        res.status(200).send();
+        res.status(200).send('done');
         return;
       }
       const _this = this;
+     
       var j = schedule.scheduleJob(
         info.id.toString(),
         "*/180 * * * *",
         async function () {
+          console.log("running at " + moment().format('MMMM Do YYYY, h:mm:ss a'));
           // get all url
-          const html = await _this.getContentByUrl(info.jobUrl);
-          await $(`#${info.id}`).remove();
-          await $("body").append(`<div id="content"></div>`);
-          await $("body").prepend(`<div id='${info.id}'>${html}</div>`);
-          let listA = $(`#${info.id} a`)
+          // const html = await _this.getContentByUrl(info.jobUrl);
+          // await $(`#${info.id}`).remove();
+          // await $("body").append(`<div id="content"></div>`);
+          // await $("body").prepend(`<div id='${info.id}'>${html}</div>`);
+          // let listA = $(`#${info.id} a`)
+          //   .map(function () {
+          //     return $(this).prop("href");
+          //   })
+          //   .get();
+          // if (!info.rule.maxLength) {
+          //   info.rule.maxLength = 255;
+          // }
+          // if (!info.rule.contain) {
+          //   info.rule.contain = "";
+          // }
+          // listA = listA.filter(
+          //   (i) =>
+          //     i.length >=
+          //       (info.rule.minLength || info.rule.contain.length + 5) &&
+          //     i.includes("/") &&
+          //     i[0] == "/" &&
+          //     i.includes(info.rule.contain)
+          // );
+          // let baseUrl = info.jobUrl.slice(0, info.jobUrl.lastIndexOf("/"));
+          // listA = listA.map((i) => baseUrl + i);
+          // listA = Array.from(new Set(listA));
+          // // res.json(listA);
+          // const elements = await getDataFromQuery(
+          //   `select Selector as selector, Post_Property as postProperty from setting_element where Setting_Page_Id = ?`,
+          //   info.settingPageId
+          // );
+          // _this.clone(listA, elements, info, req);
+          const URL = info.jobUrl;
+          const options = {
+            uri: URL,
+            transform: function (body) {
+              return cheerio.load(body);
+            },
+          };
+
+          var $ = await rp(options);
+          let listA = $(`a`)
             .map(function () {
               return $(this).prop("href");
             })
             .get();
+
           if (!info.rule.maxLength) {
             info.rule.maxLength = 255;
           }
@@ -432,12 +475,32 @@ class postController {
           let baseUrl = info.jobUrl.slice(0, info.jobUrl.lastIndexOf("/"));
           listA = listA.map((i) => baseUrl + i);
           listA = Array.from(new Set(listA));
-          // res.json(listA);
           const elements = await getDataFromQuery(
             `select Selector as selector, Post_Property as postProperty from setting_element where Setting_Page_Id = ?`,
             info.settingPageId
           );
-          _this.clone(listA, elements, info, req);
+          for (let i = 0; i < listA.length; i++) { 
+            let url = listA[i]
+            const op = {
+              uri: url,
+              transform: function (body) {
+                return cheerio.load(body);
+              },
+            };
+            try {
+              let $ = await rp(op);
+              let dataSave = {};
+              elements.map((e) => {
+                dataSave = { ...dataSave, ..._this.parseDataPlus(e, $) };
+              });
+              dataSave["sourceUrl"] = url;
+              dataSave["sourceId"] = info.settingWebId;
+              dataSave["categoryId"] = info.categoryId;
+              await _this.saveArticle(dataSave, req);
+            } catch (error) {
+              continue;
+            } 
+          }
         }
       );
       res.status(200).send();
@@ -462,6 +525,24 @@ class postController {
     }
   }
 
+  parseDataPlus(data, jq) {
+    const dataSave = {};
+    dataSave[data.postProperty] =
+      data.postProperty === "content"
+        ? jq(data.selector).html()
+        : jq(data.selector).text();
+    dataSave[data.postProperty] = dataSave[data.postProperty] || "";
+    dataSave[data.postProperty] = dataSave[data.postProperty].trim();
+    if (data.postProperty === "avatar") {
+      let avatarUrl = jq(data.selector).attr("src");
+      dataSave[data.postProperty] = avatarUrl;
+    }
+    if (!dataSave[data.postProperty]) {
+      return;
+    }
+    return dataSave;
+  }
+
   parseData(data) {
     const dataSave = {};
     dataSave[data.postProperty] =
@@ -471,7 +552,7 @@ class postController {
     dataSave[data.postProperty] = dataSave[data.postProperty] || "";
     dataSave[data.postProperty] = dataSave[data.postProperty].trim();
     if (data.postProperty === "avatar") {
-      dataSave[data.postProperty] = _.get($(data.selector)[0], 'src', '');
+      dataSave[data.postProperty] = _.get($(data.selector)[0], "src", "");
     }
     if (!dataSave[data.postProperty]) {
       return;
@@ -480,7 +561,7 @@ class postController {
   }
 
   async saveArticle(data, req) {
-    if(!data.avatar) {
+    if (!data.avatar) {
       return Promise.resolve("");
     }
     let dataSave: any = {};
