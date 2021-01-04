@@ -407,7 +407,7 @@ class postController {
      
       var j = schedule.scheduleJob(
         info.id.toString(),
-        "*/180 * * * *",
+        "0 0 */4 * * *",
         async function () {
           console.log("running at " + moment().format('MMMM Do YYYY, h:mm:ss a'));
           // get all url
